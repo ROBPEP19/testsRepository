@@ -251,53 +251,6 @@ This code only runs all the time.
 ## Source code
 
 ```cpp
-/***********************************************************************
- *  FILE NAME:  OPEN_PRUEBA
- *
- *
- *  PURPOSE:    This program is the version of the main 
- *              robot code for the Open Challenge of the 
- *              Future Engineers category of the World
- *              Robot Olympiad.
- *  
- *
- *  HOW IT WORKS: The program uses side time-of-flight 
- *                distance sensors to keep the robot 
- *                constantly aligned with the center line 
- *                between the two side walls. Additionally, 
- *                in the event of a frontal collision or 
- *                when approaching a collision, the front 
- *                sensor is used to move backward or reduce 
- *                speed, respectively.
- *
- *
- *  LIBRARIES USED:
- *  Name                        Description
- *  ----                        -----------
- *  ESP32Servo                  Functions required to control a 
- *                               servomotor with the ESP32
- *  Wire                        Allows I2C communication
- *  Adafruit_TCS34725           Functions required to use the 
- *                               Adafruit TCS34725 RGB Color Sensor
- *
- *
- *  OTHER PROGRAMS NEEDED TO WORK
- *  Name                        Description
- *  ----                        -----------
- *  none
- *
- *
- *  CREATED BY: Vila-Stem 8
- *
- *                                                
- *  LAST MODIFIED: August 16th 2026                                     
- *                                                                      
- *                                                                      
- *  REPOSITORY: https://github.com/Vila-Stem/WRO_FUTURE_ENGINEERS_2026  
- *
- ***********************************************************************
-*/
-
 /* INCLUDE LIBRARIES */
 #include <ESP32Servo.h>                                                   
 #include <Wire.h>
