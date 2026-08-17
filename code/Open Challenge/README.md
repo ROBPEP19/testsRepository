@@ -18,7 +18,7 @@ We have not created any additional libraries or files as required.
 
 A flowchart of the code's operation can be seen below.
 
-![Open Challenge Flowchart](Open_Challenge_Flowchart.png)
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/code/Open%20Challenge/Open_Challenge_Flowchart.png" width="500">
 
 As can be seen, as soon as the robot is powered on, it enters standby mode until the Start button is pressed. Meanwhile, as observed in the source code, the robot's various systems and peripherals are initialized (I2C communication, color sensor, servomotor, etc.).
 
@@ -119,7 +119,7 @@ void IRAM_ATTR OdometerInterrupt()
 
 **Return**: void 
 
-Odometer interrupt. It uses the ESP32 interrupt management system so that when the odometer moves, this code is executed. 
+Odometer interrupt. It uses the ESP32 interrupt management system so that when the odometer moves, this code is executed.
 
 --------------
 
