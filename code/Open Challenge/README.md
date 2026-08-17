@@ -251,6 +251,54 @@ This code only runs all the time.
 ## Source code
 
 ```cpp
+/***********************************************************************
+ *  FILE NAME:  OPEN_PRUEBA
+ *
+ *
+ *  PURPOSE:    This program is the version of the main 
+ *              robot code for the Open Challenge of the 
+ *              Future Engineers category of the World
+ *              Robot Olympiad.
+ *  
+ *
+ *  HOW IT WORKS: The program uses side time-of-flight 
+ *                distance sensors to keep the robot 
+ *                constantly aligned with the center line 
+ *                between the two side walls. Additionally, 
+ *                in the event of a frontal collision or 
+ *                when approaching a collision, the front 
+ *                sensor is used to move backward or reduce 
+ *                speed, respectively.
+ *
+ *
+ *  LIBRARIES USED:
+ *  Name                        Description
+ *  ----                        -----------
+ *  ESP32Servo                  Functions required to control a 
+ *                               servomotor with the ESP32
+ *  Wire                        Allows I2C communication
+ *  Adafruit_TCS34725           Functions required to use the 
+ *                               Adafruit TCS34725 RGB Color Sensor
+ *
+ *
+ *  OTHER PROGRAMS NEEDED TO WORK
+ *  Name                        Description
+ *  ----                        -----------
+ *  none
+ *
+ *
+ *  CREATED BY: Vila-Stem 8
+ *
+ *                                                
+ *  LAST MODIFIED: August 16th 2026                                     
+ *                                                                      
+ *                                                                      
+ *  REPOSITORY: https://github.com/Vila-Stem/WRO_FUTURE_ENGINEERS_2026  
+ *
+ ***********************************************************************
+*/
+
+
 /* INCLUDE LIBRARIES */
 #include <ESP32Servo.h>                                                   
 #include <Wire.h>
@@ -285,26 +333,32 @@ const int BASE_SPEED = 120;
 
 
 /* CREATE OBJECTS */
-Adafruit_TCS34725 tcs = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_50MS, TCS34725_GAIN_60X);    
-Servo servo;                                                                                    
+Adafruit_TCS34725 tcs = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_50MS, TCS34725_GAIN_60X);    ///< Color sensor TCS34725 object
+Servo servo;                                                                                    ///< Servo object
 
 
 /* VARIABLES */
-int button_state = HIGH;              
-int corner_count = 0;                 
-long delay_line = 0;                  
-int travel_sense = 1;                 
-byte rear_phase = 0;                  
-long end_motor_millis = 0;            
-long prev_millis_line_detection = 0;  
-long prev_millis_front = 0;           
-unsigned long rear_phase_until = 0;   
-long odo_filter = 0;                  
-int odo_integral = 0;                 
-int d_servo = 0;                      
+int button_state = HIGH;              ///< START button state
+int corner_count = 0;                 ///< Counts the number of corners the robot has passed. It should go from 0 to 12.
+long delay_line = 0;                  ///< NOT IN USE
+int travel_sense = 1;                 ///< Controls travel sense. 0 = BRAKE, 1 = FORWARD, 2 = BACKWARD
+byte rear_phase = 0;                  ///< Controls the rear phases. 0 = NORMAL, 1 = STOP, 2 = REVERSE, 3 = RESUME
+long end_motor_millis = 0;            ///< Variable to control the additional time added from entering the last section until the motor stops
+long prev_millis_line_detection = 0;  ///< Variable to control time and avoid multiple detections of the same line
+long prev_millis_front = 0;           ///< Variable to control time and avoid multiple detections of the wall from the front sensor
+unsigned long rear_phase_until = 0;   ///< Variable to control time for the reverse system
+long odo_filter = 0;                  ///< Variable to control time and avoid multiple detections of the same step of the odometer
+int odo_integral = 0;                 ///< Odometer step count
+int d_servo = 0;                      ///< How much the servo needs to move
 
 
 /* FUNCTIONS */
+/**
+ * Odometer interrupt. It uses the ESP32 interrupt management 
+ * system so that when the odometer moves, this code is executed.
+ * @param none
+ * @return void
+ */
 void IRAM_ATTR OdometerInterrupt(){
   if ((micros()-odo_filter)>1000)   // Avoids double detecting the same step
   {
@@ -325,6 +379,13 @@ void IRAM_ATTR OdometerInterrupt(){
 }
 
 
+/**
+ * Request the demanded value of the indicated ToF Luna via I2C connectivity.
+ * @param addr I2C address of the ToF Luna that you wish to request
+ * @param reg Value to be requested. 0x00 for distance. 0x02 for strength
+ * @return Desired value of the ToF Luna in question
+ * @see LunaDistance()
+ */
 uint16_t LunaRead16(uint8_t addr, uint8_t reg) {
   Wire.beginTransmission(addr);                         // Begins I2C communication with the given address 
   Wire.write(reg);                                      // Tells ToF Luna that we desire the given type of information
@@ -335,6 +396,16 @@ uint16_t LunaRead16(uint8_t addr, uint8_t reg) {
 }
 
 
+/**
+ * This function returns the distance in mm measured by the requested 
+ * Luna ToF and also ensures that this measurement makes sense using 
+ * the strength of the Luna ToF, thus giving consistent results in 
+ * borderline cases.
+ * @param addr I2C address of the ToF Luna that you wish to request
+ * @return Distance in mm measured
+ * @return 0xFFFF if failed to measure
+ * @see LunaRead16()
+ */
 uint16_t LunaDistance(uint8_t addr) {
   uint16_t d = LunaRead16(addr, 0x00);          // Request ToF Luna distance
   uint16_t strength = LunaRead16(addr, 0x02);   // Request ToF Luna stregth
@@ -348,6 +419,13 @@ uint16_t LunaDistance(uint8_t addr) {
 }
 
 
+/**
+ * The driving and collision avoidance algorith.
+ * @param none
+ * @return void
+ * @see LunaDistance()
+ * @see ServoTurning()
+ */
 void Drive() 
 {  
   // Initialize variable for reading the ToF sensors
@@ -436,6 +514,13 @@ void Drive()
 }
 
 
+/**
+ * The servo turning algorith.
+ * @param _distance_right The right distance measured by the ToF Luna sensor
+ * @param _distance_left The left distance measured by the ToF Luna sensor
+ * @return void
+ * @see Drive()
+ */
 void ServoTurning(signed int _distance_right, signed int _distance_left)
 {
   // Initialize needed variables
@@ -468,6 +553,13 @@ void ServoTurning(signed int _distance_right, signed int _distance_left)
 
 
 /* SETUP AND LOOP FUNCTIONS */
+/**
+ * This code only runs once when the ESP32 starts up.
+ * Initialize all systems and peripherals and wait for the 
+ * start button to be pressed to start the program.
+ * @param none
+ * @return void
+ */
 void setup() {
   Serial.begin(115200);                             // Starts Serial for debugging reasons
   Wire.begin(SDA_PIN, SCL_PIN);                     // I2C communication for ToF Luna
@@ -536,6 +628,11 @@ void setup() {
 }
 
 
+/**
+ * This code only runs all the time.
+ * @param none
+ * @return void
+ */
 void loop() {
   // Gets color temp from the Adafruit TCS34725 color sensor
   uint16_t r, g, b, c, colorTemp;                                 // Initialize needed variables
