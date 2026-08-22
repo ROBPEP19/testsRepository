@@ -1,5 +1,5 @@
 /***********************************************************************
- *  FILE NAME:  OPEN_PRUEBA
+ *  FILE NAME:  OPEN_CHALLENGE
  *
  *
  *  PURPOSE:    This program is the version of the main 
@@ -37,7 +37,7 @@
  *  CREATED BY: Vila-Stem 8
  *
  *                                                
- *  LAST MODIFIED: August 16th 2026                                     
+ *  LAST MODIFIED: August 22nd 2026                                     
  *                                                                      
  *                                                                      
  *  REPOSITORY: https://github.com/Vila-Stem/WRO_FUTURE_ENGINEERS_2026  
@@ -401,7 +401,7 @@ void loop() {
   // Stops the car when the number of laps is reached (12 corners)
   if (corner_count >= 12) 
   {
-    if ((end_motor_millis + 1000) <= millis()) 
+    if ((end_motor_millis + 1500) <= millis()) 
     {
       travel_sense=0;    
     }
