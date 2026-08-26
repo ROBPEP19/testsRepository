@@ -10,6 +10,8 @@
 # VILA-STEM 8’s repository
 **This is the Vila-stem 8 repository for the 2026 season WRO Future Engineers challenge**
 
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/team-photos/team-photos-1.png" width="600">
+
 ## TABLE OF CONTENTS
 
 ## 1. INTRODUCTION
@@ -24,7 +26,7 @@ The robot requires components for both control and power, as well as for obtaini
 
 #### ESP32 S3
 
-<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/components-photos/esp32-s3-photo.jfif" width="500">
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/components-photos/esp32-s3-photo.jfif" width="300">
 
 | | |
 | -------- | ------- |
@@ -36,7 +38,7 @@ The robot requires components for both control and power, as well as for obtaini
 
 #### ESP32 S3 CAM AND OV5640
 
-<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/components-photos/esp32-s3-cam-photo.jpg" width="500">
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/components-photos/esp32-s3-cam-photo.jpg" width="300">
 
 | | |
 | -------- | ------- |
@@ -49,7 +51,7 @@ The robot requires components for both control and power, as well as for obtaini
 
 #### L298N MOTOR DRIVER
 
-<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/components-photos/l298n-motor-driver-photo.jfif" width="500">
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/components-photos/l298n-motor-driver-photo.jfif" width="300">
 
 | | |
 | -------- | ------- |
@@ -63,7 +65,7 @@ The robot requires components for both control and power, as well as for obtaini
 
 #### MOTOR
 
-<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/components-photos/12v-motor-photo.jpg" width="500">
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/components-photos/12v-motor-photo.jpg" width="300">
 
 | | |
 | -------- | ------- |
@@ -75,7 +77,7 @@ The robot requires components for both control and power, as well as for obtaini
 
 #### TF-LUNA
 
-<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/components-photos/tf-luna-photo.jpg" width="500">
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/components-photos/tf-luna-photo.jpg" width="300">
 
 | | |
 | -------- | ------- |
@@ -88,7 +90,7 @@ The robot requires components for both control and power, as well as for obtaini
 
 #### ADAFRUIT TCS34725
 
-<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/components-photos/adafruit-tcs34725-photo.jpg" width="500">
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/components-photos/adafruit-tcs34725-photo.jpg" width="300">
 
 | | |
 | -------- | ------- |
@@ -101,7 +103,7 @@ The robot requires components for both control and power, as well as for obtaini
 
 #### MG995 SERVOMOTOR
 
-<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/components-photos/mg995-servomotor-photo.png" width="500">
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/components-photos/mg995-servomotor-photo.png" width="300">
 
 | | |
 | -------- | ------- |
@@ -114,7 +116,7 @@ The robot requires components for both control and power, as well as for obtaini
 
 #### LM2596 CONVERTERS
 
-<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/components-photos/lm2596-converter-photo.jpg" width="500">
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/components-photos/lm2596-converter-photo.jpg" width="300">
 
 | | |
 | -------- | ------- |
@@ -125,7 +127,7 @@ The robot requires components for both control and power, as well as for obtaini
 
 #### SWITCH
 
-<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/components-photos/power-switch-photo.jpg" width="500">
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/components-photos/power-switch-photo.jpg" width="300">
 
 | | |
 | -------- | ------- |
@@ -136,7 +138,7 @@ The robot requires components for both control and power, as well as for obtaini
 
 #### BUTTON
 
-<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/components-photos/button-photo.jfif" width="500">
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/components-photos/button-photo.jfif" width="300">
 
 | | |
 | -------- | ------- |
@@ -145,7 +147,7 @@ The robot requires components for both control and power, as well as for obtaini
 
 ### 3.2. ELECTRICAL DIAGRAM
 
-<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/diagrams/electrical-diagram.jpg" width="500">
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/diagrams/electrical-diagram.jpg" width="1000">
 
 ### 3.3. CONNECTION TYPE DIAGRAM
 
@@ -175,18 +177,34 @@ This diagram shows the connection type of each component to the main microcontro
 #### 4.2.2. Failures and improvement
 
 ## 5. CODE
-# CODE
 
 We can find a description of the operation and algorithms of the different codes by clicking on the following links.
 
-- [**Open Challenge**](/code/open-challenge/): ESP32 main code for the Open Challenge
-- [**Obstacle Challenge**](/code/obstacle-challenge/): ESP32 main code for the Obstacle Challenge
-- [**Camera Code**](/code/camera-code/): ESP32 camera code for the Obstacle Challenge
+- [**Open Challenge**](/main/code/open-challenge/): ESP32 main code for the Open Challenge
+- [**Obstacle Challenge**](/main/code/obstacle-challenge/): ESP32 main code for the Obstacle Challenge
+- [**Camera Code**](/main/code/camera-code/): ESP32 camera code for the Obstacle Challenge
 
 This diagram shows what code needs to be uploaded to each microcontroller.
 
 <img src = "https://github.com/ROBPEP19/testsRepository/blob/main/diagrams/code-diagram.png" width="500">
 
+## 6. PHOTOS
+
+### 6.1. ROBOT PHOTOS
+
+| | |
+| --- | --- |
+| <img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/robot-photo-front.png" width="300"> | <img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/robot-photo-back.png" width="300"> |
+| <img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/robot-photo-left.png" width="300"> | <img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/robot-photo-right.png" width="300"> |
+| <img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/robot-photo-top.png" width="300"> | <img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/robot-photo-bottom.png" width="300"> |
+
+### 6.2. TEAM PHOTOS
+
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/team-photos/team-photos-1.png" width="400">
+
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/team-photos/team-photos-2.png" width="400">
+
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/team-photos/team-photos-3.png" width="400">
 
 ## 7. LIST OF COMPONENTS
 
@@ -202,3 +220,5 @@ This diagram shows what code needs to be uploaded to each microcontroller.
 
 
 ## 8. LIST OF 3D DESIGNS
+
+## 9. LICENSE
