@@ -200,11 +200,11 @@ This diagram shows what code needs to be uploaded to each microcontroller.
 
 ### 6.2. TEAM PHOTOS
 
-<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/team-photos/team-photo-1.png" width="400">
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/team-photos/team-photo-1.png" width="600">
 
-<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/team-photos/team-photo-2.png" width="400">
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/team-photos/team-photo-2.png" width="600">
 
-<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/team-photos/team-photo-3.png" width="400">
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/team-photos/team-photo-3.png" width="600">
 
 ## 7. LIST OF COMPONENTS
 
