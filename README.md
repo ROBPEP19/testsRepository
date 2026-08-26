@@ -88,7 +88,7 @@ The robot requires components for both control and power, as well as for obtaini
 
 #### ADAFRUIT TCS34725
 
-<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/components-photos/adafruit-tcs34725-photo-jpg" width="500">
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/components-photos/adafruit-tcs34725-photo.jpg" width="500">
 
 | | |
 | -------- | ------- |
