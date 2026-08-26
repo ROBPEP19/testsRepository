@@ -16,7 +16,56 @@
 
 ## 1. INTRODUCTION
 
+Vila-stem 8 is the Future Engineers team of the Vila-Stem educational robotics cultural association, located in Vila-real, Spain. Some members of this team have already participated in the WRO in different categories in previous years, including this year, while for others it is their first time competing, but we are all equally excited to participate in the Future Engineers category of WRO 2026.
+
+Our first competition this season was the regional WRO in Dénia, where we won first place and qualified for the national final.
+
+Now we are heading to the national final of WRO Spain 2026 in Andorra, eager to present our project.
+
+Throughout this document, you will find an explanation of our robot and links to other documents that explain the different sections in more detail.
+
+To comply with the competition rules, we have also included a Journal of Engineering in PDF format. This document is a compilation of the information explained throughout this repository.
+
 ## 2. MOBILITY MANAGEMENT
+
+### 2.1. Chassis design
+
+(images/front_robot.jpg)
+(images/side_robot.jpg)
+(images/top_robot.jpg)
+
+The lower chassis base comes from a development kit we acquired, so we simply had to assemble it. This kit provided the wheels, motor, and steering system, which simplified assembly. We designed a top platform on top of this kit, where the components are installed, as well as another set of parts to mount the components.
+
+Purchasing this kit allowed us to have a metal chassis that better withstands the robot's stresses. This freed us up to design, using plastic and 3D printing, those parts that wouldn't be subjected to heavy loads.
+
+How We Arrived at This Design
+
+Initially, the idea was to mount all the components on the lower chassis, but the lack of space and the desire for a more aesthetically pleasing design led us to install a top platform. This platform saves space and also provides easier access to the connections. We ruled out increasing the robot's height because this keeps the center of gravity low and maintains its compact size.
+
+This year we also aimed for a more aesthetically pleasing robot, which is why the design includes, for example, a decorative top cover and insulated cable covers, among other improvements.
+
+
+### 2.2. Drive System
+
+(images/motor.jpg)
+
+In our robot, the rear wheels are the drive wheels. There is a single axle connecting both wheels, and a gear connects them directly to the motor, without using any differential mechanism. This causes both wheels to always rotate at the same speed.
+
+Although, theoretically, this mechanism could cause the wheels to slip on curves, since the path of travel is different for each wheel in this case, we chose this system because it seemed sufficient for our robot's needs and is easier to install and maintain. A more complex mechanism would have added an extra difficulty that, in the repeated tests we conducted, we didn't find necessary to implement. Any slippage does not affect the robot's proper functioning.
+
+During assembly, we encountered some problems. Some gears and parts didn't fit together, and it took us a while to get them all aligned, but we eventually managed.
+
+### 2.3. Steering System
+
+(images/servo.jpg)
+
+(images/diagrama_giro.png)
+
+The steering system is the typical pivot axle (like a wagon): the entire front axle rotates on a central pin moved by the servo. It's the most common system, but it works just as well and is inexpensive, so it was the logical choice for us.
+
+Here, too, we had problems, especially during assembly: some axle parts broke, and we had to replace them with identical ones. There were also parts that were difficult to fit, some because they weren't very well made and others because we got a little confused during assembly.
+
+Physically, there isn't a stop that directly limits the servo's movement. However, the code itself includes limitations that would prevent the wheels from over-rotating and hitting the sides of the chassis.
 
 ## 3. SENSORS AND ELECTRICITY
 
@@ -222,3 +271,9 @@ This diagram shows what code needs to be uploaded to each microcontroller.
 ## 8. LIST OF 3D DESIGNS
 
 ## 9. LICENSE
+
+The code in this repository is licensed under the GNU General Public License v3.0.
+
+Everything not under the GNU General Public License v3.0 in this repository (including photographs, diagrams, etc) is under the Creative Commons Attribution Share Alike 4.0 International license
+
+A copy of each license can be found in the [LICENSE](LICENSE) file.
