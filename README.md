@@ -10,7 +10,7 @@
 # VILA-STEM 8’s repository
 **This is the Vila-stem 8 repository for the 2026 season WRO Future Engineers challenge**
 
-<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/team-photos/team-photos-1.png" width="600">
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/team-photos/team-photo-1.png" width="600">
 
 ## TABLE OF CONTENTS
 
@@ -200,11 +200,11 @@ This diagram shows what code needs to be uploaded to each microcontroller.
 
 ### 6.2. TEAM PHOTOS
 
-<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/team-photos/team-photos-1.png" width="400">
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/team-photos/team-photo-1.png" width="400">
 
-<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/team-photos/team-photos-2.png" width="400">
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/team-photos/team-photo-2.png" width="400">
 
-<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/team-photos/team-photos-3.png" width="400">
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/team-photos/team-photo-3.png" width="400">
 
 ## 7. LIST OF COMPONENTS
 
