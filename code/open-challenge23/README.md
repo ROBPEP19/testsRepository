@@ -1,4 +1,4 @@
-# OPEN_CHALLENGE.ino
+# open-challenge.ino
 
 # Introduction to the code
 

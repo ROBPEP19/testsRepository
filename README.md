@@ -180,9 +180,9 @@ This diagram shows the connection type of each component to the main microcontro
 
 We can find a description of the operation and algorithms of the different codes by clicking on the following links.
 
-- [**Open Challenge**](/main/code/open-challenge/): ESP32 main code for the Open Challenge
-- [**Obstacle Challenge**](/main/code/obstacle-challenge/): ESP32 main code for the Obstacle Challenge
-- [**Camera Code**](/main/code/camera-code/): ESP32 camera code for the Obstacle Challenge
+- [**Open Challenge**](/code/open-challenge/): ESP32 main code for the Open Challenge
+- [**Obstacle Challenge**](/code/obstacle-challenge/): ESP32 main code for the Obstacle Challenge
+- [**Camera Code**](/code/camera-code/): ESP32 camera code for the Obstacle Challenge
 
 This diagram shows what code needs to be uploaded to each microcontroller.
 

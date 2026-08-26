@@ -1,5 +1,5 @@
 /***********************************************************************
- *  FILE NAME:  OPEN_CHALLENGE
+ *  FILE NAME:  open-challenge
  *
  *
  *  PURPOSE:    This program is the version of the main 
@@ -37,7 +37,7 @@
  *  CREATED BY: Vila-Stem 8
  *
  *                                                
- *  LAST MODIFIED: August 22nd 2026                                     
+ *  LAST MODIFIED: August 26th 2026                                     
  *                                                                      
  *                                                                      
  *  REPOSITORY: https://github.com/Vila-Stem/WRO_FUTURE_ENGINEERS_2026  
