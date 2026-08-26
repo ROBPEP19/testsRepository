@@ -2,8 +2,8 @@
 
 In this folder you can find the various codes for the robot's operation.
 
-- [**Open Challenge**](/code/Open-Challenge/): ESP32 main code for the Open Challenge
-- [**Obstacle Challenge**](/code/Obstacle-Challenge/): ESP32 main code for the Obstacle Challenge
-- [**Camera Code**](/code/Camera-Code/): ESP32 camera code for the Obstacle Challenge
+- [**Open Challenge**](/code/open-challenge/): ESP32 main code for the Open Challenge
+- [**Obstacle Challenge**](/code/obstacle-challenge/): ESP32 main code for the Obstacle Challenge
+- [**Camera Code**](/code/camera-code/): ESP32 camera code for the Obstacle Challenge
 
-<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/code/Code_Diagrams.png" width="500">
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/diagrams/code-diagram.png" width="500">
