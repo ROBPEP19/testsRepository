@@ -10,7 +10,7 @@
 # VILA-STEM 8’s repository
 **This is the Vila-stem 8 repository for the 2026 season WRO Future Engineers challenge**
 
-<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/team-photos/team-photo-1.png" width="600">
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/team-photos/team-photo-1.jpeg" width="600">
 
 ## TABLE OF CONTENTS
 
@@ -249,11 +249,9 @@ This diagram shows what code needs to be uploaded to each microcontroller.
 
 ### 6.2. TEAM PHOTOS
 
-<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/team-photos/team-photo-1.png" width="600">
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/team-photos/team-photo-1.jpeg" width="600">
 
-<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/team-photos/team-photo-2.png" width="600">
-
-<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/team-photos/team-photo-3.png" width="600">
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/team-photos/team-photo-2.jpg" width="600">
 
 ## 7. LIST OF COMPONENTS
 
@@ -267,7 +265,6 @@ This diagram shows what code needs to be uploaded to each microcontroller.
 * **1 * OV5640**
 * **1 * ESP32 S3**
 
-
 ## 8. LIST OF 3D DESIGNS
 
 ## 9. LICENSE
@@ -276,4 +273,4 @@ The code in this repository is licensed under the GNU General Public License v3.
 
 Everything not under the GNU General Public License v3.0 in this repository (including photographs, diagrams, etc) is under the Creative Commons Attribution Share Alike 4.0 International license
 
-A copy of each license can be found in the [LICENSE](LICENSE) file.
+A copy of each license can be found in the [LICENSE](LICENSE.txt) file.
