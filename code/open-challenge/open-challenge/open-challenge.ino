@@ -233,7 +233,7 @@ void Drive()
     }
   }
 
-  ServoTurning(distance_right, distance_left)     // Servo turning algorithm
+  ServoTurning(distance_right, distance_left);    // Servo turning algorithm
 
   // Speed control
   int base_speed = BASE_SPEED;                    // Base speed of the robot
