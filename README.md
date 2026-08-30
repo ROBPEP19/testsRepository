@@ -14,6 +14,31 @@
 
 ## TABLE OF CONTENTS
 
+* [1. INTRODUCTION](#1-introduction)
+
+* [2. MOBILITY MANAGEMENT](#2-mobility-management)
+    * [2.1. Chassis design](#21-chassis-design)
+    * [2.2. Drive System](#22-drive-system)
+    * [2.3. Steering System](#23-steering-system)
+
+* [3. SENSORS AND ELECTRICITY](#3-sensors-and-electricity)
+    * [3.1. List of sensors and electrical components](#31-list-of-sensors-and-electrical-components)
+    * [3.2. Electrical diagram](#32-electrical-diagram)
+    * [3.3. Connection type diagram](#33-connection-type-diagram)
+    * [3.4. Power consumption](#34-power-consumption)
+
+* [4. CODE](#4-code)
+
+* [5. PHOTOS](#5-photos)
+    * [5.1. Robot photos](#51-robot-photos)
+    * [5.2. Team photos](#52-team-photos)
+
+* [6. VIDEOS](#6-videos)
+
+* [7. LIST OF COMPONENTS](#7-list-of-components)
+
+* [8. LICENSE](#8-license)
+
 ## 1. INTRODUCTION
 
 Vila-stem 8 is the Future Engineers team of the Vila-Stem educational robotics cultural association, located in Vila-real, Spain. Some members of this team have already participated in the WRO in different categories in previous years, including this year, while for others it is their first time competing, but we are all equally excited to participate in the Future Engineers category of WRO 2026.
@@ -30,9 +55,8 @@ To comply with the competition rules, we have also included a Journal of Enginee
 
 ### 2.1. Chassis design
 
-(images/front_robot.jpg)
-(images/side_robot.jpg)
-(images/top_robot.jpg)
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/placeholder.png" width="300">
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/placeholder.png" width="300">
 
 The lower chassis base comes from a development kit we acquired, so we simply had to assemble it. This kit provided the wheels, motor, and steering system, which simplified assembly. We designed a top platform on top of this kit, where the components are installed, as well as another set of parts to mount the components.
 
@@ -47,7 +71,7 @@ This year we also aimed for a more aesthetically pleasing robot, which is why th
 
 ### 2.2. Drive System
 
-(images/motor.jpg)
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/placeholder.png" width="300">
 
 In our robot, the rear wheels are the drive wheels. There is a single axle connecting both wheels, and a gear connects them directly to the motor, without using any differential mechanism. This causes both wheels to always rotate at the same speed.
 
@@ -57,9 +81,7 @@ During assembly, we encountered some problems. Some gears and parts didn't fit t
 
 ### 2.3. Steering System
 
-(images/servo.jpg)
-
-(images/diagrama_giro.png)
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/placeholder.png" width="300">
 
 The steering system is the typical pivot axle (like a wagon): the entire front axle rotates on a central pin moved by the servo. It's the most common system, but it works just as well and is inexpensive, so it was the logical choice for us.
 
@@ -85,16 +107,16 @@ The robot requires components for both control and power, as well as for obtaini
 
 ----
 
-#### ESP32 S3 CAM AND OV5640
+#### HUSKYLENS 2
 
-<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/components-photos/esp32-s3-cam-photo.jpg" width="300">
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/components-photos/huskylens-2-photo.jpg" width="300">
 
 | | |
 | -------- | ------- |
-| **WHY:** | We chose a variant of the ESP32 S3 that includes a camera connection port as the camera data processor. This microcontroller was selected because, being the same type as the main microcontroller, we could work more efficiently with both, only needing to become familiar with one variant. We have two microcontrollers because analyzing camera data is a very resource-intensive process, and therefore it was better to dedicate a microcontroller to it. We selected the OV5640 from several cameras already available in the classroom because it provided the best view of the track after testing all of them. |
-| **LOCATION:** | The microcontroller is located on the upper platform, beneath the top trim cover. The camera is mounted on a front bracket and connected to the microcontroller by a cable. |
-| **VOLTAGE:** | 3.3V (can be powered via a 5V pin connected to a linear regulator) |
-| **CONNECTION TYPE:** | UART communication |
+| **WHY:** | For much of the robot's development, we tried using an ESP32 S3 CAM with a special lens. We originally chose this option because we thought it would be simpler than using a Huskylens 2, and because our experience with the Huskylens 1 had already been complicated. However, as development progressed, we realized it was actually much more complex. With the ESP32 S3 CAM, we had to manually calibrate several values ​​per code for it to detect colors, and the detection algorithms weren't very effective. In contrast, after some tests with the Huskylens 2, we saw that its ability to be calibrated using the built-in screen and button, along with its improved color detection algorithms, led us to choose it. We had to adapt part of the obstacle code to this new sensor. |
+| **LOCATION:** | It is located on the front of the robot, it has an special stand that keeps it above the robot and looking with a small angle down.|
+| **VOLTAGE:** | 5V (can also be powered via 3.3V) |
+| **CONNECTION TYPE:** | I2C |
 
 ----
 
@@ -169,8 +191,8 @@ The robot requires components for both control and power, as well as for obtaini
 
 | | |
 | -------- | ------- |
-| **WHY:** | The 12V we get from the battery needs to be converted to 5V and 3.3V for the other components to function. This requires a converter. There are mainly two types: linear and switched-mode. Linear converters, like the LM7805, have the problem of being energy inefficient and generating a lot of heat when converting excess voltage. On the other hand, switched-mode converters offer higher efficiency and generate less heat. Therefore, we selected a switched-mode voltage converter. The advantage of choosing this particular version of the LM2596 is that it is adjustable, which allows us to have several identical converters in stock to meet the robot's needs. It also has a display that shows the output voltage in real time, useful for monitoring the power status without needing a multimeter. |
-| **LOCATION:** | Both are located on the underside of the robot's upper platform. |
+| **WHY:** | The 12V we get from the battery needs to be converted to 5V and 3.3V for the other components to function. This requires a converter. There are mainly two types: linear and switched-mode. Linear converters, like the LM7805, have the problem of being energy inefficient and generating a lot of heat when converting excess voltage. On the other hand, switched-mode converters offer higher efficiency and generate less heat. Therefore, we selected a switched-mode voltage converter. The advantage of choosing this particular version of the LM2596 is that it is adjustable, which allows us to have several identical converters in stock to meet the robot's needs. It also has a display that shows the output voltage in real time, useful for monitoring the power status without needing a multimeter. We have 2 12V to 5V converters because after installing the Huskylens 2 we saw that amount of current it used exceded the limits and made the voltage drop to the point that all the components connected to the only 5V converter stopped working, so we added one 12V to 5V only for the Huskylens 2 and another for all the rest of components.|
+| **LOCATION:** | 2 are located on the underside of the robot's upper platform and the Huskylens 2 5V converter is located on top of the robot's upper platform. |
 
 ---
 
@@ -200,7 +222,7 @@ The robot requires components for both control and power, as well as for obtaini
 
 ### 3.3. CONNECTION TYPE DIAGRAM
 
-This diagram shows the connection type of each component to the main microcontroller. The pink squares represent the microcontrollers. The blue octagons are the sensors that send information to the main microcontroller. The yellow circles are the actuators.
+This diagram shows the connection type of each component to the main microcontroller. The pink squares represent the microcontroller. The blue octagons are the sensors that send information to the main microcontroller. The yellow circles are the actuators.
 
 <img src = "https://github.com/ROBPEP19/testsRepository/blob/main/diagrams/connection-type-diagram.png" width="500">
 
@@ -208,38 +230,30 @@ This diagram shows the connection type of each component to the main microcontro
 
 | COMPONENT | VOLTAGE (V) | CURRENT (mA) |
 | -------- | -------: | -------: |
-| 2 * LM2596 Converters | 12 | 50 |
+| 3 * LM2596 Converters | 12 | 50 |
 | Servomotor MG995 | 5 | ≈ 200 - 1200 |
 | Adafruit TCS34725 | 3.3 | 10 |
 | Motor | 12 | ≈ 300 |
 | 3 * TF-Luna | 5 | 70 |
 | L298N Motor driver | Vm.: 12; Vlog.: 5 | 36 |
-| ESP32 S3 CAM and OV5640 | 3.3 | ≈ 100 |
+| Huskylens 2 | 5 | ≈ 300 - 600 |
 | ESP32 S3 | 3.3 | ≈ 50 |
 
-## 4. OBSTACLE MANAGEMENT
-### 4.1. OPEN CHALLENGE
-#### 4.1.1. Strategy
-#### 4.1.2. Failures and improvement
-### 4.2. OBSTACLE CHALLENGE
-#### 4.2.1. Strategy
-#### 4.2.2. Failures and improvement
 
-## 5. CODE
+## 4. CODE
 
 We can find a description of the operation and algorithms of the different codes by clicking on the following links.
 
 - [**Open Challenge**](/code/open-challenge/): ESP32 main code for the Open Challenge
 - [**Obstacle Challenge**](/code/obstacle-challenge/): ESP32 main code for the Obstacle Challenge
-- [**Camera Code**](/code/camera-code/): ESP32 camera code for the Obstacle Challenge
 
-This diagram shows what code needs to be uploaded to each microcontroller.
+This diagram shows what code needs to be uploaded to the microcontroller.
 
 <img src = "https://github.com/ROBPEP19/testsRepository/blob/main/diagrams/code-diagram.png" width="500">
 
-## 6. PHOTOS
+## 5. PHOTOS
 
-### 6.1. ROBOT PHOTOS
+### 5.1. ROBOT PHOTOS
 
 | | |
 | --- | --- |
@@ -247,27 +261,32 @@ This diagram shows what code needs to be uploaded to each microcontroller.
 | <img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/robot-photo-left.png" width="300"> | <img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/robot-photo-right.png" width="300"> |
 | <img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/robot-photo-top.png" width="300"> | <img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/robot-photo-bottom.png" width="300"> |
 
-### 6.2. TEAM PHOTOS
+### 5.2. TEAM PHOTOS
 
 <img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/team-photos/team-photo-1.jpeg" width="600">
 
 <img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/team-photos/team-photo-2.jpg" width="600">
 
+## 6. VIDEOS
+
+We have uploaded two videos showing our robot completing each challenge. You can access them via the following links:
+* [Open Challenge](https://youtu.be/gIDQgGI8u58)
+* [Obstacle Challenge](example.com)
+
+
 ## 7. LIST OF COMPONENTS
 
-* **2 * LM2596 Converters**
+* **3 * LM2596 Converters**
 * **1 * Servomotor MG995** 
 * **1 * Adafruit TCS34725** 
 * **1 * 12V DC Motor** 
 * **3 * TF-Luna** 
 * **1 * LM2596 Converters**
-* **1 * ESP32 S3 CAM**
+* **1 * Huskylens 2**
 * **1 * OV5640**
 * **1 * ESP32 S3**
 
-## 8. LIST OF 3D DESIGNS
-
-## 9. LICENSE
+## 8. LICENSE
 
 The code in this repository is licensed under the GNU General Public License v3.0.
 

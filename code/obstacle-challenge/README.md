@@ -6,9 +6,11 @@ Although at first glance the code for the Open Challenge may seem trivial due to
 
 On the other hand, we understand that the Open Challenge should demonstrate the minimum the robot is capable of, which is why we have also prioritized creating robust yet simple code.
 
+We strongly recommend that you first study the code of the [**Open Challenge**](/code/open-challenge/) to understand how the different functions work and then come to this chapter, because in order not to unnecessarily repeat the explanations we will simplify those already explained.
+
 # Code structure
 
-All the code for this challenge is contained in a single .ino file, named OPEN_PRUEBA.ino. This code is executed in the robot's ESP32 main.
+All the code for this challenge is contained in a single .ino file, named obstacle-challenge.ino. This code is executed in the robot's ESP32 main.
 
 There are no other programs for this challenge.
 
@@ -20,19 +22,20 @@ A flowchart of the code's operation can be seen below.
 
 <img src = "https://github.com/ROBPEP19/testsRepository/blob/main/diagrams/open-challenge-flowchart.png" width="500">
 
-As can be seen, as soon as the robot is powered on, it enters standby mode until the Start button is pressed. Meanwhile, as observed in the source code, the robot's various systems and peripherals are initialized (I2C communication, color sensor, servomotor, etc.).
+As can be seen, as soon as the robot is powered on, it enters standby mode until the Start button is pressed. Meanwhile, as observed in the source code, the robot's various systems and peripherals are initialized (Huskylens 2, I2C communication, color sensor, servomotor, etc.).
 
-Once the Start button is pressed, the robot enters the loop. We can divide the loop's operation into two parts:
+Once the Start button is pressed, the robot enters the loop. We can divide the loop's operation into three parts:
 1. Robot Movement
 2. Limit Case Checking
+3. Camera analysis
 
 ## Robot movement
 
-The strategy here is simple: keep the robot centered between the side walls at all times.
+The basic movement strategy is the same as in the Open Challenge: use the side TF-Luna sensors to keep the robot as centered as possible between the side walls of the track. In fact, if the Obstacle Challenge were to occur without any traffic signs, the robot would complete the challenge in the same way as in the Open Challenge.
 
-To achieve this, the Luna ToF sensors located on the sides of the robot measure the distance to the right and left. Then, using the difference between these distances, the servomotor is instructed to turn the wheels in the corresponding direction. For example, if the distance to the right is greater than to the left, the robot will turn its wheels to the right, and if the distance to the left is greater than to the right, the wheels will turn to the left. The benefit of using the difference in distances is that it allows the servomotor to turn only slightly if the difference is small, while if the difference is very large, it turns much more, allowing for better cornering.
+Building on the foundation already explained, the sign avoidance mechanism is added. This involves using information received from the camera (block type, position, etc.) and the block's X-axis position to add a correction to the servo's rotation angle, depending on the block's color. For example, if a green block is encountered slightly to the right of the robot, a slight servo offset will be added so that the wheels turn a little more to the left than they would if there were no block. Conversely, if a red block is encountered far to the right of the robot, a large offset will be added so that the robot can avoid the blocks.
 
-With this, after testing, we have ensured that regardless of the direction of rotation, the starting position, or the size of the central square, the robot always remains centered.
+The basic strategy was already tested during the Open Challenge trials. The obstacle section involved trial and error until it worked. The biggest problems we encountered were related to the block detection mechanism, which we explain below, rather than the dodge mechanism.
 
 ## Check of limit cases
 
@@ -42,14 +45,23 @@ The loop also performs certain checks at all times on the following things, as s
 - If the front Luna ToF sensor measures a distance less than 150mm, a collision is practically imminent, and the reversing process is activated. This temporarily disables the robot's movement and makes it reverse to avoid getting stuck.
 - If the corner_counter is equal to 12, the robot has already completed three laps and must stop in the final section.
 
+## Camera analysis
+
+First, regarding the camera analysis, it's worth noting that the Huskylens 2 wasn't our first choice, as explained in the electronics and sensors section. However, introducing the Huskylens 2 allowed us to delegate some of the detection and calibration algorithms to those already integrated into the camera, thus improving the code's reliability and ease of use.
+
+We utilize the Huskylens 2's color detection algorithm, as it detects blocks of color, which is precisely what we needed. The ESP32S3 constantly queries what the Huskylens 2 is seeing, obtaining certain data from each block it detects. Internally, we then select the largest block, which will be the closest to the camera. This way, if it detects two signals, one near and one far, it first acts on the nearer one.
+
+Once the block is selected, we send its color and X position relative to the robot to the main code, so the movement algorithm can handle the rest.
+
+To calibrate the camera to the colors, we used the color training functionality already available on the Huskylens 2, accessible via the screen and a button. In the various tests we conducted, we found that compared to the Huskylens 1 (which we also had at the academy), the Huskylens 2 is much better at distinguishing colors and seeing the same color in different lighting environments. This is ideal because we cannot guarantee that the lighting will be constant across the entire board on competition day, and this way, even if one part is brighter than another, it will see the correct color in all cases.
+
 # Bugs and errors found in the code
 
-Throughout the development of this code, we encountered various problems and challenges that we had to resolve. This, in turn, allowed us to create a more robust code than we originally envisioned.
+In terms of movement, since we based our work on the already functional Open Challenge code, we haven't encountered any particular bugs. We recommend reviewing that section to see what might be causing problems.
 
-Initially, some minor problems we had included incorrectly assigning the I2C address to each Luna ToF sensor and missing resistors here and there. But above all, we would highlight the following problems we encountered, as their solution has improved the code's resilience, and we believe other users might encounter similar issues.
-
-- One problem we found was that the Luna ToF sensors, when measuring very long distances (which we considered to be infinity), returned a measurement of 0 mm. On the other hand, when very close to a wall, since they weren't designed to measure such short distances, they also returned some erroneous values, highly variable, and in many cases, also 0 mm. This presented the problem of how to distinguish between 0 at a very long distance and 0 at a very short distance. For this, we used the "strength" data provided by the Luna ToF sensors themselves. After several tests, we verified that the strength was minimal when it was 0 at infinity and very high when it was 0 at very close range. Therefore, every time we obtained a value of 0, we performed a second check with the strength to determine what type of 0 it was. If it was 0 at infinity, we set it to 1500 mm.
-- Sometimes, when the robot had to make very tight turns, it would pick up a lot of speed and crash into the walls. We originally designed a reversing mechanism that should have solved this problem. However, the frequency and manner of the collisions caused it to take a long time to complete the circuit, and in many cases, the reversing maneuver was ineffective. This was resolved by having the robot reduce its speed when it detects that it is approaching the walls. In many cases, this avoids the collision, and in those where it doesn't, the slower collision usually leaves the robot in a better position to more easily complete the circuit after reversing.
+Some errors already related to this challenge include typical wiring mistakes, such as incorrectly connecting the TX and RX pins. We'd like to highlight these main issues that bothered us the most:
+- One problem we observed after extensive testing is that the wheel servos wear out quite quickly, requiring frequent replacement. There's no single solution, as wear is common with any machine; however, adapting to this wear is key. We've decided to purchase several spare servos to take with us to competitions. Furthermore, we've learned that if we redesign the robot in the future, we should make servo replacement easier. Currently, it's a bit difficult, but we don't have the time to redesign the entire mechanism.
+- Another issue is that we originally used an ESP32 S3 CAM. This option is incredibly cheaper than using the Huskylens 2; however, after using it for a while, we found that calibrating it for our challenge was really difficult, since we had to manually manage nearly 10 values ​​for each color and then manually change them via code, which was very time-consuming. This, combined with the fact that the detection algorithm we set up wasn't very good, led us to opt for the Huskylens 2.
 
 # Source code description
 

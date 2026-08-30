@@ -8,7 +8,7 @@ On the other hand, we understand that the Open Challenge should demonstrate the 
 
 # Code structure
 
-All the code for this challenge is contained in a single .ino file, named OPEN_PRUEBA.ino. This code is executed in the robot's ESP32 main.
+All the code for this challenge is contained in a single .ino file, named open-challenge.ino. This code is executed in the robot's ESP32 main.
 
 There are no other programs for this challenge.
 
