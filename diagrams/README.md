@@ -6,7 +6,7 @@ This folder contains the multiple diagrams used to documentate the project.
 
 Shows what code has to be uploaded to the ESP32 S3 on each challenge.
 
-<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/diagrams/code-diagram.png" width="600">
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/diagrams/code-diagram.png" width="400">
 
 ### Connection type diagram
 
@@ -18,7 +18,7 @@ This diagram shows the connection type of each component to the main microcontro
 
 Component connections.
 
-<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/diagrams/electrical-diagram.jpg" width="600">
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/diagrams/electrical-diagram.jpg" width="900">
 
 ### Open challenge flowchart
 
