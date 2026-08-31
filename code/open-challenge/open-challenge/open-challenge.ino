@@ -37,7 +37,7 @@
  *  CREATED BY: Vila-Stem 8
  *
  *                                                
- *  LAST MODIFIED: August 26th 2026                                     
+ *  LAST MODIFIED: August 31st 2026                                     
  *                                                                      
  *                                                                      
  *  REPOSITORY: https://github.com/Vila-Stem/WRO_FUTURE_ENGINEERS_2026  
@@ -185,13 +185,13 @@ void Drive()
   if (d != 0xFFFF) 
   {
     distance_right = d;
-    if (distance_right>1500) distance_right=1500;                           // If the distance is greater than 1500mm, it limits it to 1500mm.
+    if (distance_right > 1500) distance_right = 1500;                     // If the distance is greater than 1500mm, it limits it to 1500mm.
   }
   d = LunaDistance(LUNA_ADDR[1]);                                         // Left distance sensor
   if (d != 0xFFFF) 
   {
     distance_left = d;
-    if (distance_left>1500) distance_left=1500;                             // If the distance is greater than 1500mm, it limits it to 1500mm.
+    if (distance_left > 1500) distance_left = 1500;                       // If the distance is greater than 1500mm, it limits it to 1500mm.
   }
   d = LunaDistance(LUNA_ADDR[2]);                                         // Front distance sensor
   if (d != 0xFFFF) 
@@ -295,6 +295,7 @@ void ServoTurning(signed int _distance_right, signed int _distance_left)
 
 
 /* SETUP AND LOOP FUNCTIONS */
+
 /**
  * This code only runs once when the ESP32 starts up.
  * Initialize all systems and peripherals and wait for the 
@@ -367,8 +368,6 @@ void setup() {
     if (button_state == LOW) countButton++;
     delay(10);
   }
-
-  Serial.println("START");
 }
 
 
@@ -429,4 +428,3 @@ void loop() {
   
   Drive();        // The driving and collision avoidance algorith
 }
-

@@ -15,10 +15,10 @@
  *                in the event of a frontal collision or 
  *                when approaching a collision, the front 
  *                sensor is used to move backward or reduce 
- *                speed, respectively. It is connected to another
- *                ESP32 S3 CAM that tells if there is an object,
+ *                speed, respectively. It is connected to a
+ *                HuskyLens 2 that tells if there is an object,
  *                its position and color, so this code makes the 
- *                servo turn enough no pass the obstacle through
+ *                servo turn enough to pass the obstacle through
  *                the right side.
  *
  *
@@ -30,20 +30,18 @@
  *  Wire                        Allows I2C communication
  *  Adafruit_TCS34725           Functions required to use the 
  *                               Adafruit TCS34725 RGB Color Sensor
+ *  DFRobot_HuskylensV2         Functions for HuskyLens AI vision sensor
  *
  *
  *  OTHER PROGRAMS NEEDED TO WORK
  *  Name                        Description
  *  ----                        -----------
- *  camera-code                 The camera code runs on the ESP32
- *                               S3 CAM. Tells this program the
- *                               color and position of the obstacles
+ *  none
  *
  *
  *  CREATED BY: Vila-Stem 8
- *
  *                                                
- *  LAST MODIFIED: August 29th 2026                                     
+ *  LAST MODIFIED: August 31st 2026                                     
  *                                                                      
  *                                                                      
  *  REPOSITORY: https://github.com/Vila-Stem/WRO_FUTURE_ENGINEERS_2026  
@@ -56,6 +54,7 @@
 #include <ESP32Servo.h>
 #include <Wire.h>
 #include <Adafruit_TCS34725.h>
+#include "DFRobot_HuskylensV2.h"
 
 
 /* CONSTANT VALUES */
@@ -75,23 +74,37 @@ const int MOTOR_B_PIN = 20;
 const int MOTOR_A_PIN = 10;
 const int ENA_PIN = 15;                                     // Enabled motor pin. Used with PWM for speed control
 const int BUTTON_PIN = 13;                                  // START button pin
-const int ODOMETER_PIN = 15;                                // Odometer pin
 const int SDA_PIN = 11;
 const int SCL_PIN = 12;
-const int SDA_PIN_COLOR = 40;
-const int SCL_PIN_COLOR = 41;
+const int SDA_PIN_COLOR = 40;                               // SDA: TCS34725 + HuskyLens 2 (shared bus)
+const int SCL_PIN_COLOR = 41;                               // SCL: TCS34725 + HuskyLens 2 (shared bus)
 const int SERVO_PIN = 9;
-const int ESP32_CAM_RX = 16;
-const int ESP32_CAM_TX = 17;
 
 const int BASE_SPEED = 120;
 
-const int CAM_TIMEOUT_MS = 1000;                            // Time it waits for the ESP32 S3 CAM responds
+const int HUSKYLENS_ADDR = 0x50;                            // HuskyLens 2 I2C address (fixed by DFRobot_HuskylensV2 protocol)
+const int HUSKYLENS_TIMEOUT_MS = 1000;                      // Time it waits for HuskyLens response
+
+/* Huskylens */
+const int HUSKYLENS_ID_GREEN_1 = 1;                         // ID assigned to green in HuskyLens
+const int HUSKYLENS_ID_GREEN_2 = 3;                         // ID assigned to green in HuskyLens
+const int HUSKYLENS_ID_RED_1 = 2;                           // ID assigned to red in HuskyLens
+const int HUSKYLENS_ID_RED_2 = 4;                           // ID assigned to red in HuskyLens
+const int CAM_CLOSE_AREA = 90000;                           // Block area (width*height px) that means the object is too close and triggers reverse
+const int CAM_COUNT_NUMBER = 15;                            // How many drive loops the camera correction has to be applied
+const int CAM_CLOSE_NUMBER = 8;                             // How many drive loops the block reverse flag has to be up
+// ALGORITHM_COLOR_RECOGNITION is defined by the HuskyLens library
+// (value 4). This guard is only a safety net for library versions
+// that do not expose it.
+#ifndef ALGORITHM_COLOR_RECOGNITION
+#define ALGORITHM_COLOR_RECOGNITION 4
+#endif
 
 
 /* CREATE OBJECTS */
 Adafruit_TCS34725 tcs = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_50MS, TCS34725_GAIN_60X);
 Servo servo;
+HuskylensV2 huskylens;
 
 
 /* VARIABLES */
@@ -105,12 +118,14 @@ long prev_millis_line_detection = 0;  ///< Variable to control time and avoid mu
 long prev_millis_front = 0;           ///< Variable to control time and avoid multiple detections of the wall from the front sensor
 unsigned long rear_phase_until = 0;   ///< Variable to control time for the reverse system
 int d_servo = 0;                      ///< How much the servo needs to move
-unsigned long last_cam_request = 0;
-int cam_correction = 0;
-int cam_count = 0;
+unsigned long last_huskylens_request = 0; ///< Variable to control time for calling the Huskylens 2
+int cam_correction = 0;               ///< Camera correction to be applied to the servo
+int cam_count = 0;                    ///< Controls how many drive loops the camera correction has been applied
+int cam_close = 0;                    ///< Controls how many drive loops the block reverse flag is up
 
 
 /* FUNCTIONS */
+
 /**
  * Request the demanded value of the indicated ToF Luna via I2C connectivity.
  * @param addr I2C address of the ToF Luna that you wish to request
@@ -140,24 +155,151 @@ uint16_t LunaRead16(uint8_t addr, uint8_t reg) {
  */
 uint16_t LunaDistance(uint8_t addr) {
   uint16_t d = LunaRead16(addr, 0x00);          // Request ToF Luna distance
-  uint16_t strength = LunaRead16(addr, 0x02);   // Request ToF Luna stregth
-  if (d == 0xFFFF || strength == 0xFFFF || strength < LUNA_STRENGHT_MIN) return 0xFFFF; // Returns 0xFFFF if failed to measure or the strenght is too low
+  uint16_t strength = LunaRead16(addr, 0x02);   // Request ToF Luna strength
+  if (d == 0xFFFF || strength == 0xFFFF || strength < LUNA_STRENGHT_MIN) return 0xFFFF; // Returns 0xFFFF if failed
   if (d == 0)                                   // The distance may be 0 because the sensor is too close to a wall and is saturated, or because it measures infinity
   {
     if (strength >= LUNA_CLOSE_STRENGTH) return LUNA_CLOSE_MM;  // If the strength is very high, the sensor is too close to the wall.
     return 1500;                                                // If the strength is very low, the sensor measures infinity.
   }
-  return d*10;  // The ToF Luna returns cm, but the code neeeds mm
+  return d*10;  // The ToF Luna returns cm, but the code needs mm
 }
 
 
 /**
- * The driving, collision avoidance and traffic light avoidance mechanism
- * algorith.
+ * Initialize HuskyLens communication (shares Wire1 with the TCS34725).
  * @param none
- * @return void
+ * @return true if initialization successful
+ * @return false if initialization was unseccessful
+ * @see RequestHuskyLens()
+ */
+bool InitHuskyLens() {
+  Wire1.setClock(100000);   // Wire1 is already initialized in setup() for the Adafruit TCS34275
+  // Debug code in case it is not working the Huskylens 2
+  if (!huskylens.begin(Wire1)) {
+    Serial.println("ERROR: HuskyLens not detected on I2C (Wire1)");
+    return false;
+  }
+  
+  // Set algorithm to Color Recognition
+  if (!huskylens.switchAlgorithm((eAlgorithm_t)ALGORITHM_COLOR_RECOGNITION)) {
+    Serial.println("ERROR: Failed to set Color Recognition algorithm");
+    return false;
+  }
+  
+  Serial.println("HuskyLens initialized successfully");
+  return true;
+}
+
+
+/**
+ * Request color and position data from HuskyLens.
+ * and picks the largest detected color block and 
+ * computes a servo correction.
+ * @return true if a valid green/red block was detected
+ * @return false if otherwise
+ * @see InitHuskyLens()
+ */
+bool RequestHuskyLens() {
+  // Refresh the result cache from the sensor
+  huskylens.getResult((eAlgorithm_t)ALGORITHM_COLOR_RECOGNITION);
+  
+  // Check if there are results available for the color recognition algorithm
+  if (!huskylens.available((eAlgorithm_t)ALGORITHM_COLOR_RECOGNITION)) 
+  {
+    return false;
+  }
+  
+  // How many color objects are being detected
+  int count = huskylens.getCachedResultNum((eAlgorithm_t)ALGORITHM_COLOR_RECOGNITION);
+  if (count <= 0) 
+  {
+    return false;
+  }
+  
+  // Find the largest block (the closest one)
+  int bestIdx = -1;
+  int maxArea = 0;
+  for (int i = 0; i < count; i++) 
+  {
+    Result* result = huskylens.getCachedResultByIndex((eAlgorithm_t)ALGORITHM_COLOR_RECOGNITION, i);  // Gets the result data of each block by calling it by its ID number
+    if (result) 
+    {
+      int area = result->width * result->height;                // Calculates the block area (width * height)
+      if (area > maxArea)                                       // Checks if the area of this block is bigger than the max. area
+      {
+        maxArea = area;                                         // Saves the biggest area detected
+        bestIdx = i;                                            // Saves the ID number of the biggest area detected
+      }
+    }
+  }
+  if (bestIdx == -1)                                            // Checks that the "find largest block" system did not failed
+  {
+    return false;
+  }
+  
+  // Gets the result data of the biggest area block
+  Result* result = huskylens.getCachedResultByIndex((eAlgorithm_t)ALGORITHM_COLOR_RECOGNITION, bestIdx);
+  if (!result) 
+  {
+    return false;
+  }
+  
+  // Map HuskyLens learned color ID to our color scheme (1 = GREEN, 2 = RED)
+  int color = 0;
+  if (result->ID == HUSKYLENS_ID_GREEN_1 || result->ID == HUSKYLENS_ID_GREEN_2 )
+  {
+    color = 1;  // GREEN
+  } 
+  else if (result->ID == HUSKYLENS_ID_RED_1 || result->ID == HUSKYLENS_ID_RED_2) 
+  {
+    color = 2;  // RED
+  } 
+  else 
+  {
+    return false; // Unknown color. Failed.
+  }
+  
+  // HuskyLens returns x center (0 left side of the camera screen, 320 right side of the camera screen)
+  int cx = result->xCenter;
+  int area = result->width * result->height;
+  if (cx <= 0 || cx > 320)    // Validate detection making sure it is between the allowed values
+  {
+    return false;
+  }
+  
+  // Calculate correction
+  if (color == 1)         // GREEN, negative correction to go left
+  { 
+    cam_correction = -((320 - cx) / 6);
+  } 
+  else if (color == 2)    // RED, positive correction to go right
+  { // RED
+    cam_correction = cx / 6; 
+  }
+  
+  cam_count = CAM_COUNT_NUMBER;
+
+  // Detects if a block is too close to the camera and the ToF Luna frontal sensor has not seen it.
+  // It uses the area of the block to know if it is too big and has to start the reverse manouver.
+  if (area >= CAM_CLOSE_AREA) 
+  {
+    cam_close = CAM_CLOSE_NUMBER;
+  }
+  
+  // Debug output
+  const char* colorName = (color == 1) ? "GREEN" : "RED";
+  Serial.printf("HUSKYLENS: color=%s cx=%d area=%d corr=%d\n", colorName, cx, area, cam_correction);
+  
+  // Retuns true if everything worked properly
+  return true;
+}
+
+
+/**
+ * The driving, collision avoidance and obstacle-passing mechanism.
  * @see LunaDistance()
- * @see ServoTurning()
+ * @see RequestHuskyLens()
  */
 void Drive() {
 
@@ -165,46 +307,51 @@ void Drive() {
   static signed int distance_right, distance_left, distance_front;
   uint16_t d;
 
-  // Initialize variables for the camera information
-  static int count_correction = 0;
-  static signed int correction = 0 ;
+  //debug
+  distance_front = 1000000000;
 
-  // Request camera information every 100 ms
-  if (millis() - last_cam_request > 100) 
+  // Initialize variables for the camera information
+  static int count_correction = 0;          // How many drive loops the camera correction has been applied
+  static signed int correction = 0;         // Correction applied to the servo
+
+  // Request HuskyLens information every 100 ms
+  if (millis() - last_huskylens_request > 100)
   {
-    last_cam_request = millis();
-    RequestCamera();
+    RequestHuskyLens();
+    last_huskylens_request = millis();
   }
 
-  // It executes only if a traffic light has been detected
-  if (cam_count > 0) {
-    count_correction = cam_count;
-    correction = cam_correction;
+  // It executes only if a color block has been detected
+  // Saves the RequestHuskyLens() variables to local variables to this fuction
+  if (cam_count > 0) 
+  {
+    count_correction = cam_count;     
+    correction = cam_correction;      
     cam_count = 0;
   }
 
   // These lines read the ToF Luna sensors and save the distance 
   // in the corresponding variable as long as it hasn't failed reading.
   d = LunaDistance(LUNA_ADDR[0]);                                         // Right distance sensor
-  if (d != 0xFFFF) 
+  if (d != 0xFFFF)
   {
     distance_right = d;
-    if (distance_right>1500) distance_right=1500;                           // If the distance is greater than 1500mm, it limits it to 1500mm.
+    if (distance_right > 1500) distance_right = 1500;                     // Limit to 1500mm
   }
   d = LunaDistance(LUNA_ADDR[1]);                                         // Left distance sensor
-  if (d != 0xFFFF) 
+  if (d != 0xFFFF)
   {
     distance_left = d;
-    if (distance_left>1500) distance_left=1500;                             // If the distance is greater than 1500mm, it limits it to 1500mm.
+    if (distance_left > 1500) distance_left = 1500;                       // Limit to 1500mm
   }
-  d = LunaDistance(LUNA_ADDR[2]);                                         // Front distance sensor
-  if (d != 0xFFFF) 
+  /*d = LunaDistance(LUNA_ADDR[2]);                                       // Front distance sensor
+  if (d != 0xFFFF)
   {
     distance_front = d;
-  }
+  }*/
 
-  // If front sensor detects an obstacle init rear sequence. This sequence is time based
-  if (distance_front < FRONT_REAR_MM)
+  // If front sensor or Huskylens 2 detects an obstacle init rear sequence. This sequence is time based
+  if (distance_front < FRONT_REAR_MM || cam_close > 0)
   {
     if (rear_phase == 0)
     {
@@ -217,18 +364,21 @@ void Drive() {
     }
   }
 
+  // Decay the camera "close" flag while the obstacle passes away
+  if (cam_close > 0) cam_close--;
+
   // Rear sequence. This is time based
   if (rear_phase >= 1)
   {
     switch (rear_phase)
     {
-      case 1:             // Stops the car for 250 mm (by deafult)
+      case 1:             // Stops the car for 250 ms (by default)
         travel_sense=0;
         if (millis() >= rear_phase_until){ rear_phase=2; rear_phase_until = millis() + 1500; }
         break;
       case 2: 
-        travel_sense=2;   // Reverse the car for 1500 mm (by deafult)
-        if (millis() >= rear_phase_until){ rear_phase=3; rear_phase_until = millis() + 50; }
+        travel_sense=2;   // Reverse the car for 1500 ms (by default)
+        if (millis() >= rear_phase_until){ rear_phase=3; rear_phase_until = millis() + 500; }
         break;
       case 3:             // The robot continues forward.
         travel_sense=1;
@@ -240,13 +390,13 @@ void Drive() {
   // The servo needs to move a certain amount depending on the 
   // difference of distance measured between the left and 
   // the right ToF Luna sensors
-  d_servo = (distance_right - distance_left)/10;  //
+  d_servo = (distance_right - distance_left)/10;
 
   // Limits the amount a servo can move in order to avoid collision of the wheels and the frame
   if (d_servo > 39) d_servo = 39;
   if (d_servo < -39) d_servo = -39;
 
-  if (count_correction > 0) 
+  if (count_correction > 0)
   {
     d_servo = correction;
     count_correction--;
@@ -255,8 +405,8 @@ void Drive() {
   // In case of reverse, limited steering to avoid flipping
   if (rear_phase == 2)
   {                                 
-    if (d_servo > 12) d_servo = 12;
-    if (d_servo < -12) d_servo = -12;
+    //if (d_servo > 40) d_servo = 12;
+    //if (d_servo < -12) d_servo = -12;
     servo.write(-d_servo + 90);
   }
   else if (travel_sense == 1)
@@ -267,116 +417,28 @@ void Drive() {
   // Speed control
   int base_speed = BASE_SPEED;                    // Base speed of the robot
 
-  if (distance_front < FRONT_REAR_MM)             // Reduces the speed before starting the reverse manouver
+  if (distance_front < FRONT_REAR_MM || cam_close > 0)  // Reduces the speed before starting the reverse manoeuvre
   {
-    base_speed = 60;
+    base_speed = 120;
   }
-  else if (distance_front < FRONT_BRAKE_MM)       // Reduces the speed when approaching a frontal wall to avoid a collision or having to use the reverse manouver
+  else if (distance_front < FRONT_BRAKE_MM)       // Reduces the speed when approaching a frontal wall
   {
-    base_speed = 75;
+    base_speed = 120;
   }
 
-  ledcWrite(ENA_PIN, base_speed);                  // Sends the motor the speed.
-}
-
-
-/**
- * Reads the incoming data from the ESP32 S3 CAM and saves
- * each letter as a position on a char array
- * @param *buf buffer to save the camera reply information
- * @return true if reading was successful
- * @return false if reading failed
- * @see RequestCamera()
- */
-bool ReadCameraReply(char *buf) {
-  int idx = 0;
-  
-  unsigned long timeout = millis() + CAM_TIMEOUT_MS;  
-  while (millis() < timeout)                      // Checks if there is a reply for a certain amount of time, if not the function returns false.
+  if (d_servo >= 0)
   {
-    while (Serial1.available())                   // Checks if there is information at the serial port to read
-    {
-      char c = Serial1.read();                    // Reads the first letter of the pile
-
-      if (c == '\n')                              // Checks if it is the end of the line
-      {
-        buf[idx] = '\0';                          // End symbol at the end of the buffer array
-        return true;                              // Stops reading
-      }
-
-      if (idx < (int)(48 - 1)) buf[idx++] = c;    // Saves each letter at the buffer array
-    }
-    delay(1);
+    ledcWrite(ENA_PIN, base_speed + d_servo);     // Sends the motor the speed. It is increased when turning
   }
-  return false;
-}
-
-
-/**
- * It requests the camera data, decodifies its information
- * and calculates the needed correction for the servo.
- * @param none
- * @return void
- * @see ReadCameraReply
- */
-void RequestCamera() {
-  char buf[48];                                     // Initialize an array to save the camera reply
-
-  for (int attempt = 0; attempt < 2; attempt++)     // Attempts 3 times to communicate with the ESP32 S3 CAM
+  else 
   {
-    // Demanding command that is read by the ESP32 S3 CAM
-    Serial1.println("D");                           
-
-    // Checks that the reply was succesful, if it was not it consumes this attempt
-    if (!ReadCameraReply(buf)) continue;
-
-    // Pointer set to buf
-    char *p = buf;                                  
-
-    // If the first character is "0" it means that it has not seen a traffic light (a.k.a. none). Return with values at 0
-    if (*p == '0') 
-    {
-      cam_correction = 0;
-      cam_count = 0;
-      return;
-    }
-    
-    // We get from the ESP32 S3 CAM the following information coded as:
-    // "Color(0, 1 or 2),CenterX,TotalArea"
-    // We want to get the Center X data, which is where the traffic light is located
-    int cx = 0;                                 // Center X                                  
-    char *token = strtok(p, ",");               // Divides the string into "Color(0, 1 or 2)" and "CenterX,TotalArea"
-    if (token) token = strtok(NULL, ",");       // Divides the "CenterX,TotalArea" string into "CenterX" and "TotalArea". We keep the CenterX
-    if (token) cx = atoi(token);                // Turns the Center X ASCII value into a integer
-
-    // If Center X is 0 it means a failed measure
-    if (cx > 0)
-    {
-      if (*p == '1')                      // GREEN traffic light
-      {
-        cam_correction = -(cx / 8);       // Bigger the Center X bigger the correction for the servo
-      } 
-      else                                // RED traffic light
-      {
-        cam_correction = (320 - cx) / 8;  // Bigger the Center X bigger the correction for the servo
-      }
-      cam_count = 15;
-    } 
-    else                                  
-    {
-      cam_correction = 0;
-      cam_count = 0;
-    }
-    return;
+    ledcWrite(ENA_PIN, base_speed - d_servo);     // Sends the motor the speed. It is increased when turning
   }
-  
-  // Failed measure, reached 3 failed attempts
-  cam_correction = 0;
-  cam_count = 0;
 }
 
 
 /* SETUP AND LOOP FUNCTIONS */
+
 /**
  * This code only runs once when the ESP32 starts up.
  * Initialize all systems and peripherals and wait for the 
@@ -388,12 +450,11 @@ void setup() {
   Serial.begin(115200);                           // Starts Serial for debugging reasons
   Wire.begin(SDA_PIN, SCL_PIN);                   // I2C communication for ToF Luna
   Wire.setTimeOut(100);
-  Wire.setClock(100000);                          // ToF Luna at 100kHz   
-  Wire1.begin(SDA_PIN_COLOR, SCL_PIN_COLOR);      // I2C communication for TCS34725 color sensor
-  Serial1.begin(115200, SERIAL_8N1, ESP32_CAM_RX, ESP32_CAM_TX);      // UART communication with the ESP32 S3 CAM
-
+  Wire.setClock(100000);                          // ToF Luna at 100kHz
+  Wire1.begin(SDA_PIN_COLOR, SCL_PIN_COLOR);      // I2C communication for TCS34725 color sensor and Huskylens 2
+  
   servo.attach(SERVO_PIN);                        // Initialize Servo
-  servo.write(90);                                // 0 postion Servo 
+  servo.write(90);                                // 0 position Servo
 
   // Pin Modes
   pinMode(BUTTON_PIN, INPUT_PULLUP);
@@ -408,18 +469,18 @@ void setup() {
 
   // FOR DEBUGGING
   // Checks ToF Luna presence and debug which ones don't work through the serial port.
-  for (uint8_t i = 0; i < LUNA_COUNT; i++) 
+  for (uint8_t i = 0; i < LUNA_COUNT; i++)
   {
     Wire.beginTransmission(LUNA_ADDR[i]);
-    if (Wire.endTransmission() == 0) 
+    if (Wire.endTransmission() == 0)
     {
       Serial.print("TF-Luna ");
       Serial.print(i);
       Serial.print(" OK (0x");
       Serial.print(LUNA_ADDR[i], HEX);
       Serial.println(")");
-    } 
-    else 
+    }
+    else
     {
       Serial.print("TF-Luna ");
       Serial.print(i);
@@ -429,19 +490,25 @@ void setup() {
     }
   }
 
-  // Initialize color sensor. DEBUG trought the serial port if not working.
-  if (tcs.begin(0x29, &Wire1)) 
-  {                                           
-    Serial.println("Found sensor");
-  } 
-  else 
+  // Initialize color sensor. DEBUG through the serial port if not working.
+  if (tcs.begin(0x29, &Wire1))
+  {
+    Serial.println("Found TCS34725 sensor");
+  }
+  else
   {
     Serial.println("WARNING: TCS34725 not detected, continuing without color.");
   }
 
+  // Initialize HuskyLens
+  if (!InitHuskyLens()) 
+  {
+    Serial.println("WARNING: HuskyLens init failed, continuing without vision.");
+  }
+
   // Waits for START button to be pressed
   int countButton = 0;
-  while (countButton <= 10) 
+  while (countButton <= 10)
   {
     button_state = digitalRead(BUTTON_PIN);
     if (button_state == LOW) countButton++;
@@ -461,8 +528,6 @@ void loop() {
   tcs.getRawData(&r, &g, &b, &c);                             // Gets the RGB and Clear channels
   colorTemp = tcs.calculateColorTemperature_dn40(r, g, b, c); // Calculates the color temperature from the RGBC channels
 
-  //Serial.print("Color Temp: "); Serial.println(colorTemp, DEC); // FOR DEBUGGING. Use it to calibrate the sensor
-
   // Increases corner count using the lines on the ground and the TCS34725 color sensor.
   if (colorTemp > 3000)
   {
@@ -471,55 +536,38 @@ void loop() {
       prev_millis_line_detection = millis();
       corner_count++;
     }
-  } 
+  }
 
-  // Stops the car when the number of laps is reached (12 corners)
-  if (corner_count >= 12) 
+  // Stops the car when the number of corners is reached (12 corners)
+  if (corner_count >= 12)
   {
-    if ((end_motor_millis + 1500) <= millis()) 
+    if ((end_motor_millis + 1500) <= millis())
     {
-      travel_sense=0;    
+      travel_sense = 0;
     }
-  } 
-  else 
-  {    
+  }
+  else
+  {
     end_motor_millis = millis();
   }
 
   // Sets the travel sense. 0 = BRAKE, 1 = FORWARD, 2 = BACKWARD
-  switch(travel_sense){
-    case 0: digitalWrite(MOTOR_A_PIN, LOW);
-            digitalWrite(MOTOR_B_PIN, LOW);
-    break;
-    case 1: digitalWrite(MOTOR_A_PIN, HIGH);
-            digitalWrite(MOTOR_B_PIN, LOW);
-            //digitalWrite(MOTOR_A_PIN, LOW);
-    break;
-    case 2: digitalWrite(MOTOR_A_PIN, LOW);
-            digitalWrite(MOTOR_B_PIN, HIGH);
-            //digitalWrite(MOTOR_B_PIN, LOW);
-    break;
-   }
-
-  // Sets the travel sense. 0 = BRAKE, 1 = FORWARD, 2 = BACKWARD
-  switch(travel_sense)
-  {
-    case 0: 
+  switch(travel_sense) {
+    case 0:
       digitalWrite(MOTOR_A_PIN, LOW);
       digitalWrite(MOTOR_B_PIN, LOW);
       break;
-    case 1: 
-      //digitalWrite(MOTOR_A_PIN, LOW);     // FOR DEBUGGING.
+    case 1:
       digitalWrite(MOTOR_A_PIN, HIGH);
+      //digitalWrite(MOTOR_A_PIN, LOW);         // FOR DEBUGGING.
       digitalWrite(MOTOR_B_PIN, LOW);
       break;
-    case 2: 
+    case 2:
       digitalWrite(MOTOR_A_PIN, LOW);
-      //digitalWrite(MOTOR_B_PIN, LOW);     // FOR DEBUGGING.
       digitalWrite(MOTOR_B_PIN, HIGH);
+      //digitalWrite(MOTOR_B_PIN, LOW);         // FOR DEBUGGING.
       break;
   }
-  
-  Drive();        // The driving and collision avoidance algorith
-}
 
+  Drive();        // The driving and collision avoidance algorithm
+}

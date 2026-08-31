@@ -18,8 +18,9 @@
 
 * [2. MOBILITY MANAGEMENT](#2-mobility-management)
     * [2.1. Chassis design](#21-chassis-design)
-    * [2.2. Drive System](#22-drive-system)
-    * [2.3. Steering System](#23-steering-system)
+    * [2.2. How we arrived at this design](#22-how-we-arrived-at-this-design)
+    * [2.3. Drive System](#23-drive-system)
+    * [2.4. Steering System](#24-steering-system)
 
 * [3. SENSORS AND ELECTRICITY](#3-sensors-and-electricity)
     * [3.1. List of sensors and electrical components](#31-list-of-sensors-and-electrical-components)
@@ -55,23 +56,23 @@ To comply with the competition rules, we have also included a Journal of Enginee
 
 ### 2.1. Chassis design
 
-<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/placeholder.png" width="300">
-<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/placeholder.png" width="300">
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/robot-photo-left.jpeg" width="300">
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/robot-photo-front-jpeg" width="300">
 
 The lower chassis base comes from a development kit we acquired, so we simply had to assemble it. This kit provided the wheels, motor, and steering system, which simplified assembly. We designed a top platform on top of this kit, where the components are installed, as well as another set of parts to mount the components.
 
 Purchasing this kit allowed us to have a metal chassis that better withstands the robot's stresses. This freed us up to design, using plastic and 3D printing, those parts that wouldn't be subjected to heavy loads.
 
-How We Arrived at This Design
+### 2.2. How we arrived at this design
 
 Initially, the idea was to mount all the components on the lower chassis, but the lack of space and the desire for a more aesthetically pleasing design led us to install a top platform. This platform saves space and also provides easier access to the connections. We ruled out increasing the robot's height because this keeps the center of gravity low and maintains its compact size.
 
 This year we also aimed for a more aesthetically pleasing robot, which is why the design includes, for example, a decorative top cover and insulated cable covers, among other improvements.
 
 
-### 2.2. Drive System
+### 2.3. Drive System
 
-<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/placeholder.png" width="300">
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/motor-mechanism-photo.jpeg" width="300">
 
 In our robot, the rear wheels are the drive wheels. There is a single axle connecting both wheels, and a gear connects them directly to the motor, without using any differential mechanism. This causes both wheels to always rotate at the same speed.
 
@@ -79,9 +80,9 @@ Although, theoretically, this mechanism could cause the wheels to slip on curves
 
 During assembly, we encountered some problems. Some gears and parts didn't fit together, and it took us a while to get them all aligned, but we eventually managed.
 
-### 2.3. Steering System
+### 2.4. Steering System
 
-<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/placeholder.png" width="300">
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/servo-mechanism-photo.jpeg" width="300">
 
 The steering system is the typical pivot axle (like a wagon): the entire front axle rotates on a central pin moved by the servo. It's the most common system, but it works just as well and is inexpensive, so it was the logical choice for us.
 
@@ -257,9 +258,9 @@ This diagram shows what code needs to be uploaded to the microcontroller.
 
 | | |
 | --- | --- |
-| <img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/robot-photo-front.png" width="300"> | <img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/robot-photo-back.png" width="300"> |
-| <img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/robot-photo-left.png" width="300"> | <img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/robot-photo-right.png" width="300"> |
-| <img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/robot-photo-top.png" width="300"> | <img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/robot-photo-bottom.png" width="300"> |
+| <img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/robot-photo-front.jpeg" width="300"> | <img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/robot-photo-back.jpeg" width="300"> |
+| <img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/robot-photo-left.jpeg" width="300"> | <img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/robot-photo-right.jpeg" width="300"> |
+| <img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/robot-photo-top.jpeg" width="300"> | <img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/robot-photo-bottom.jpeg" width="300"> |
 
 ### 5.2. TEAM PHOTOS
 

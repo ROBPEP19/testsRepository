@@ -2,10 +2,6 @@
 
 # Introduction to the code
 
-Although at first glance the code for the Open Challenge may seem trivial due to its apparent simplicity compared to the Obstacle Challenge, our goal with this code was not only to create something simple to quickly overcome this challenge, but also to create a foundation upon which to build the Obstacle Challenge code. With this idea in mind, our algorithm design and code structure have been designed to facilitate this transition.
-
-On the other hand, we understand that the Open Challenge should demonstrate the minimum the robot is capable of, which is why we have also prioritized creating robust yet simple code.
-
 We strongly recommend that you first study the code of the [**Open Challenge**](/code/open-challenge/) to understand how the different functions work and then come to this chapter, because in order not to unnecessarily repeat the explanations we will simplify those already explained.
 
 # Code structure
@@ -20,7 +16,7 @@ We have not created any additional libraries or files as required.
 
 A flowchart of the code's operation can be seen below.
 
-<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/diagrams/open-challenge-flowchart.png" width="500">
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/diagrams/obstacle-challenge-flowchart.png" width="500">
 
 As can be seen, as soon as the robot is powered on, it enters standby mode until the Start button is pressed. Meanwhile, as observed in the source code, the robot's various systems and peripherals are initialized (Huskylens 2, I2C communication, color sensor, servomotor, etc.).
 

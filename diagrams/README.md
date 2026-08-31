@@ -25,3 +25,9 @@ Component connections.
 Shows the algorithm used in the open challenge main code.
 
 <img src = "https://github.com/ROBPEP19/testsRepository/blob/main/diagrams/open-challenge-flowchart.png" width="400">
+
+### Obstacle challenge flowchart
+
+Shows the algorithm used in the obstacle challenge main code.
+
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/diagrams/obstacle-challenge-flowchart.png" width="400">
