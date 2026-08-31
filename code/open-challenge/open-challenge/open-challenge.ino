@@ -54,22 +54,22 @@
 
 /* CONSTANT VALUES */
 /* Related to the Luna time of flight (ToF) sensor */
-const uint8_t LUNA_COUNT = 3;                               // Number of Luna time of flight sensors
-const uint8_t LUNA_ADDR[LUNA_COUNT] = {0x11, 0x12, 0x13};   // I2C address of each ToF sensor. Right, Left, Front
-const uint16_t LUNA_STRENGHT_MIN = 20;                      // Minimum strenght needed from the ToF sensor to accept a measurement
-const uint16_t LUNA_CLOSE_STRENGTH = 150;                   // Minumum strength needed to consider a 0 distance measurement too close
-const uint16_t LUNA_CLOSE_MM = 150;                         // Value (mm) used in case of a too close measurement
+const uint8_t LUNA_COUNT = 3;                               ///< Number of Luna time of flight sensors
+const uint8_t LUNA_ADDR[LUNA_COUNT] = {0x11, 0x12, 0x13};   ///< I2C address of each ToF sensor. Right, Left, Front
+const uint16_t LUNA_STRENGHT_MIN = 20;                      ///< Minimum strenght needed from the ToF sensor to accept a measurement
+const uint16_t LUNA_CLOSE_STRENGTH = 150;                   ///< Minumum strength needed to consider a 0 distance measurement too close
+const uint16_t LUNA_CLOSE_MM = 150;                         ///< Value (mm) used in case of a too close measurement
 
 /* Collision avoidance threshold distances */
-const uint16_t FRONT_BRAKE_MM = 350;                        // Progressive braking start distance (mm) threshold
-const uint16_t FRONT_REAR_MM = 150;                         // Reverse gear start distance (mm) threshold
+const uint16_t FRONT_BRAKE_MM = 350;                        ///< Progressive braking start distance (mm) threshold
+const uint16_t FRONT_REAR_MM = 150;                         ///< Reverse gear start distance (mm) threshold
 
 /* Pins */
 const int MOTOR_B_PIN = 20;
 const int MOTOR_A_PIN = 10;
-const int ENA_PIN = 15;                                     // Enabled motor pin. Used with PWM for speed control
-const int BUTTON_PIN = 13;                                  // START button pin
-const int ODOMETER_PIN = 15;                                // Odometer pin
+const int ENA_PIN = 15;                                     ///< Enabled motor pin. Used with PWM for speed control
+const int BUTTON_PIN = 13; 
+const int ODOMETER_PIN = 15; 
 const int SDA_PIN = 11;
 const int SCL_PIN = 12;
 const int SDA_PIN_COLOR = 40;

@@ -65,28 +65,33 @@ Initially, some minor problems we had included incorrectly assigning the I2C add
 | void | **[setup](#function-setup)**() |
 | void | **[loop](#function-loop)**() |
 
+## Constants
+
+|                | Name           | Value          |
+| -------------- | -------------- | -------------- |
+| const uint8_t | **LUNA_COUNT** <br>Number of Luna time of flight sensors| 3
+| const uint8_t[LUNA_COUNT] | **LUNA_ADDR** <br>I2C address of each ToF sensor. Right, Left, Front | {0x11, 0x12, 0x13} |
+| const uint16_t | **LUNA_STRENGHT_MIN** <br>Minimum strenght needed from the ToF sensor to accept a measurement | 20 |
+| const uint16_t | **LUNA_CLOSE_STRENGTH** <br>Minumum strength needed to consider a 0 distance measurement too close | 150 |
+| const uint16_t | **LUNA_CLOSE_MM** <br>Value (mm) used in case of a too close measurement | 150 |
+| const uint16_t | **FRONT_BRAKE_MM** <br>Progressive braking start distance (mm) threshold | 350 |
+| const uint16_t | **FRONT_REAR_MM** <br>Reverse gear start distance (mm) threshold | 150 |
+| const int | **MOTOR_B_PIN**  | 20 |
+| const int | **MOTOR_A_PIN**  | 10 |
+| const int | **ENA_PIN**  | 15 |
+| const int | **BUTTON_PIN**  | 13 | 
+| const int | **ODOMETER_PIN**  | 15 |
+| const int | **SDA_PIN**  | 11 |
+| const int | **SCL_PIN**  | 12 |
+| const int | **SDA_PIN_COLOR**  | 40 |
+| const int | **SCL_PIN_COLOR**  | 41 |
+| const int | **SERVO_PIN**  | 9 |
+| const int | **BASE_SPEED**  | 120 |
+
 ## Variables
 
 |                | Name           |
 | -------------- | -------------- |
-| const uint8_t | **LUNA_COUNT**  |
-| const uint8_t[LUNA_COUNT] | **LUNA_ADDR**  |
-| const uint16_t | **LUNA_STRENGHT_MIN**  |
-| const uint16_t | **LUNA_CLOSE_STRENGTH**  |
-| const uint16_t | **LUNA_CLOSE_MM**  |
-| const uint16_t | **FRONT_BRAKE_MM**  |
-| const uint16_t | **FRONT_REAR_MM**  |
-| const int | **MOTOR_B_PIN**  |
-| const int | **MOTOR_A_PIN**  |
-| const int | **ENA_PIN**  |
-| const int | **BUTTON_PIN**  |
-| const int | **ODOMETER_PIN**  |
-| const int | **SDA_PIN**  |
-| const int | **SCL_PIN**  |
-| const int | **SDA_PIN_COLOR**  |
-| const int | **SCL_PIN_COLOR**  |
-| const int | **SERVO_PIN**  |
-| const int | **BASE_SPEED**  |
 | Adafruit_TCS34725 | **tcs** <br>Color sensor TCS34725 object.  |
 | Servo | **servo** <br>Servo object.  |
 | int | **button_state** <br>START button state.  |
@@ -290,7 +295,7 @@ This code only runs all the time.
  *  CREATED BY: Vila-Stem 8
  *
  *                                                
- *  LAST MODIFIED: August 26th 2026                                     
+ *  LAST MODIFIED: August 31st 2026                                     
  *                                                                      
  *                                                                      
  *  REPOSITORY: https://github.com/Vila-Stem/WRO_FUTURE_ENGINEERS_2026  
@@ -307,22 +312,22 @@ This code only runs all the time.
 
 /* CONSTANT VALUES */
 /* Related to the Luna time of flight (ToF) sensor */
-const uint8_t LUNA_COUNT = 3;                               // Number of Luna time of flight sensors
-const uint8_t LUNA_ADDR[LUNA_COUNT] = {0x11, 0x12, 0x13};   // I2C address of each ToF sensor. Right, Left, Front
-const uint16_t LUNA_STRENGHT_MIN = 20;                      // Minimum strenght needed from the ToF sensor to accept a measurement
-const uint16_t LUNA_CLOSE_STRENGTH = 150;                   // Minumum strength needed to consider a 0 distance measurement too close
-const uint16_t LUNA_CLOSE_MM = 150;                         // Value (mm) used in case of a too close measurement
+const uint8_t LUNA_COUNT = 3;                               ///< Number of Luna time of flight sensors
+const uint8_t LUNA_ADDR[LUNA_COUNT] = {0x11, 0x12, 0x13};   ///< I2C address of each ToF sensor. Right, Left, Front
+const uint16_t LUNA_STRENGHT_MIN = 20;                      ///< Minimum strenght needed from the ToF sensor to accept a measurement
+const uint16_t LUNA_CLOSE_STRENGTH = 150;                   ///< Minumum strength needed to consider a 0 distance measurement too close
+const uint16_t LUNA_CLOSE_MM = 150;                         ///< Value (mm) used in case of a too close measurement
 
 /* Collision avoidance threshold distances */
-const uint16_t FRONT_BRAKE_MM = 350;                        // Progressive braking start distance (mm) threshold
-const uint16_t FRONT_REAR_MM = 150;                         // Reverse gear start distance (mm) threshold
+const uint16_t FRONT_BRAKE_MM = 350;                        ///< Progressive braking start distance (mm) threshold
+const uint16_t FRONT_REAR_MM = 150;                         ///< Reverse gear start distance (mm) threshold
 
 /* Pins */
 const int MOTOR_B_PIN = 20;
 const int MOTOR_A_PIN = 10;
-const int ENA_PIN = 15;                                     // Enabled motor pin. Used with PWM for speed control
-const int BUTTON_PIN = 13;                                  // START button pin
-const int ODOMETER_PIN = 15;                                // Odometer pin
+const int ENA_PIN = 15;                                     ///< Enabled motor pin. Used with PWM for speed control
+const int BUTTON_PIN = 13; 
+const int ODOMETER_PIN = 15; 
 const int SDA_PIN = 11;
 const int SCL_PIN = 12;
 const int SDA_PIN_COLOR = 40;
@@ -438,13 +443,13 @@ void Drive()
   if (d != 0xFFFF) 
   {
     distance_right = d;
-    if (distance_right>1500) distance_right=1500;                           // If the distance is greater than 1500mm, it limits it to 1500mm.
+    if (distance_right > 1500) distance_right = 1500;                     // If the distance is greater than 1500mm, it limits it to 1500mm.
   }
   d = LunaDistance(LUNA_ADDR[1]);                                         // Left distance sensor
   if (d != 0xFFFF) 
   {
     distance_left = d;
-    if (distance_left>1500) distance_left=1500;                             // If the distance is greater than 1500mm, it limits it to 1500mm.
+    if (distance_left > 1500) distance_left = 1500;                       // If the distance is greater than 1500mm, it limits it to 1500mm.
   }
   d = LunaDistance(LUNA_ADDR[2]);                                         // Front distance sensor
   if (d != 0xFFFF) 
@@ -486,7 +491,7 @@ void Drive()
     }
   }
 
-  ServoTurning(distance_right, distance_left)     // Servo turning algorithm
+  ServoTurning(distance_right, distance_left);    // Servo turning algorithm
 
   // Speed control
   int base_speed = BASE_SPEED;                    // Base speed of the robot
@@ -548,6 +553,7 @@ void ServoTurning(signed int _distance_right, signed int _distance_left)
 
 
 /* SETUP AND LOOP FUNCTIONS */
+
 /**
  * This code only runs once when the ESP32 starts up.
  * Initialize all systems and peripherals and wait for the 
@@ -620,8 +626,6 @@ void setup() {
     if (button_state == LOW) countButton++;
     delay(10);
   }
-
-  Serial.println("START");
 }
 
 

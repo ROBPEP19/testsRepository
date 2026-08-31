@@ -59,40 +59,39 @@
 
 /* CONSTANT VALUES */
 /* Related to the Luna time of flight (ToF) sensor */
-const uint8_t LUNA_COUNT = 3;                               // Number of Luna time of flight sensors
-const uint8_t LUNA_ADDR[LUNA_COUNT] = {0x11, 0x12, 0x13};   // I2C address of each ToF sensor. Right, Left, Front
-const uint16_t LUNA_STRENGHT_MIN = 20;                      // Minimum strenght needed from the ToF sensor to accept a measurement
-const uint16_t LUNA_CLOSE_STRENGTH = 150;                   // Minumum strength needed to consider a 0 distance measurement too close
-const uint16_t LUNA_CLOSE_MM = 150;                         // Value (mm) used in case of a too close measurement
+const uint8_t LUNA_COUNT = 3;                               ///< Number of Luna time of flight sensors
+const uint8_t LUNA_ADDR[LUNA_COUNT] = {0x11, 0x12, 0x13};   ///< I2C address of each ToF sensor. Right, Left, Front
+const uint16_t LUNA_STRENGHT_MIN = 20;                      ///< Minimum strenght needed from the ToF sensor to accept a measurement
+const uint16_t LUNA_CLOSE_STRENGTH = 150;                   ///< Minumum strength needed to consider a 0 distance measurement too close
+const uint16_t LUNA_CLOSE_MM = 150;                         ///< Value (mm) used in case of a too close measurement
 
 /* Collision avoidance threshold distances */
-const uint16_t FRONT_BRAKE_MM = 350;                        // Progressive braking start distance (mm) threshold
-const uint16_t FRONT_REAR_MM = 150;                         // Reverse gear start distance (mm) threshold
+const uint16_t FRONT_BRAKE_MM = 350;                        ///< Progressive braking start distance (mm) threshold
+const uint16_t FRONT_REAR_MM = 150;                         ///< Reverse gear start distance (mm) threshold
 
 /* Pins */
 const int MOTOR_B_PIN = 20;
 const int MOTOR_A_PIN = 10;
-const int ENA_PIN = 15;                                     // Enabled motor pin. Used with PWM for speed control
-const int BUTTON_PIN = 13;                                  // START button pin
+const int ENA_PIN = 15;                                     ///< Enabled motor pin. Used with PWM for speed control
+const int BUTTON_PIN = 13;                                  ///< START button pin
 const int SDA_PIN = 11;
 const int SCL_PIN = 12;
-const int SDA_PIN_COLOR = 40;                               // SDA: TCS34725 + HuskyLens 2 (shared bus)
-const int SCL_PIN_COLOR = 41;                               // SCL: TCS34725 + HuskyLens 2 (shared bus)
+const int SDA_PIN_COLOR = 40;                               ///< SDA for TCS34725 and HuskyLens 2
+const int SCL_PIN_COLOR = 41;                               ///< SCL for TCS34725 and HuskyLens 2
 const int SERVO_PIN = 9;
 
 const int BASE_SPEED = 120;
 
-const int HUSKYLENS_ADDR = 0x50;                            // HuskyLens 2 I2C address (fixed by DFRobot_HuskylensV2 protocol)
-const int HUSKYLENS_TIMEOUT_MS = 1000;                      // Time it waits for HuskyLens response
-
 /* Huskylens */
-const int HUSKYLENS_ID_GREEN_1 = 1;                         // ID assigned to green in HuskyLens
-const int HUSKYLENS_ID_GREEN_2 = 3;                         // ID assigned to green in HuskyLens
-const int HUSKYLENS_ID_RED_1 = 2;                           // ID assigned to red in HuskyLens
-const int HUSKYLENS_ID_RED_2 = 4;                           // ID assigned to red in HuskyLens
-const int CAM_CLOSE_AREA = 90000;                           // Block area (width*height px) that means the object is too close and triggers reverse
-const int CAM_COUNT_NUMBER = 15;                            // How many drive loops the camera correction has to be applied
-const int CAM_CLOSE_NUMBER = 8;                             // How many drive loops the block reverse flag has to be up
+const int HUSKYLENS_ADDR = 0x50;                            ///< HuskyLens 2 I2C address
+const int HUSKYLENS_TIMEOUT_MS = 1000;                      ///< Time it waits for HuskyLens response
+const int HUSKYLENS_ID_GREEN_1 = 1;                         ///< ID assigned to green in HuskyLens
+const int HUSKYLENS_ID_GREEN_2 = 3;                         ///< ID assigned to green in HuskyLens
+const int HUSKYLENS_ID_RED_1 = 2;                           ///< ID assigned to red in HuskyLens
+const int HUSKYLENS_ID_RED_2 = 4;                           ///< ID assigned to red in HuskyLens
+const int CAM_CLOSE_AREA = 90000;                           ///< Block area (width*height px) that means the object is too close and triggers reverse
+const int CAM_COUNT_NUMBER = 15;                            ///< How many drive loops the camera correction has to be applied
+const int CAM_CLOSE_NUMBER = 8;                             ///< How many drive loops the block reverse flag has to be up
 // ALGORITHM_COLOR_RECOGNITION is defined by the HuskyLens library
 // (value 4). This guard is only a safety net for library versions
 // that do not expose it.
@@ -196,6 +195,7 @@ bool InitHuskyLens() {
  * Request color and position data from HuskyLens.
  * and picks the largest detected color block and 
  * computes a servo correction.
+ * @param none
  * @return true if a valid green/red block was detected
  * @return false if otherwise
  * @see InitHuskyLens()
