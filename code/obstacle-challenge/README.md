@@ -16,7 +16,7 @@ We have not created any additional libraries or files as required.
 
 A flowchart of the code's operation can be seen below.
 
-<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/diagrams/obstacle-challenge-flowchart.png" width="500">
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/diagrams/obstacle-challenge-flowchart.png" width="700">
 
 As can be seen, as soon as the robot is powered on, it enters standby mode until the Start button is pressed. Meanwhile, as observed in the source code, the robot's various systems and peripherals are initialized (Huskylens 2, I2C communication, color sensor, servomotor, etc.).
 
@@ -65,11 +65,11 @@ Some errors already related to this challenge include typical wiring mistakes, s
 
 |                | Name           |
 | -------------- | -------------- |
-| void IRAM_ATTR | **[OdometerInterrupt](#function-odometerinterrupt)**() |
 | uint16_t | **[LunaRead16](#function-lunaread16)**(uint8_t addr, uint8_t reg) |
 | uint16_t | **[LunaDistance](#function-lunadistance)**(uint8_t addr) |
 | void | **[Drive](#function-drive)**() |
-| void | **[ServoTurning](#function-servoturning)**(signed int _distance_right, signed int _distance_left) |
+| bool | **[InitHuskyLens](#function-inithuskylens)**() |
+| bool | **[RequestHuskyLens](#function-requesthuskylens)**() |
 | void | **[setup](#function-setup)**() |
 | void | **[loop](#function-loop)**() |
 
