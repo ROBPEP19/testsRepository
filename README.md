@@ -56,8 +56,8 @@ To comply with the competition rules, we have also included a Journal of Enginee
 
 ### 2.1. Chassis design
 
-<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/robot-photo-left.jpeg" width="300">
-<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/robot-photo-front-jpeg" width="300">
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/robot-photo-left.jpeg" width="600">
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/robot-photo-front.jpeg" width="600">
 
 The lower chassis base comes from a development kit we acquired, so we simply had to assemble it. This kit provided the wheels, motor, and steering system, which simplified assembly. We designed a top platform on top of this kit, where the components are installed, as well as another set of parts to mount the components.
 
@@ -72,7 +72,7 @@ This year we also aimed for a more aesthetically pleasing robot, which is why th
 
 ### 2.3. Drive System
 
-<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/motor-mechanism-photo.jpeg" width="300">
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/motor-mechanism-photo.jpeg" width="600">
 
 In our robot, the rear wheels are the drive wheels. There is a single axle connecting both wheels, and a gear connects them directly to the motor, without using any differential mechanism. This causes both wheels to always rotate at the same speed.
 
@@ -82,7 +82,7 @@ During assembly, we encountered some problems. Some gears and parts didn't fit t
 
 ### 2.4. Steering System
 
-<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/servo-mechanism-photo.jpeg" width="300">
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/photos/robot-photos/servo-mechanism-photo.jpeg" width="600">
 
 The steering system is the typical pivot axle (like a wagon): the entire front axle rotates on a central pin moved by the servo. It's the most common system, but it works just as well and is inexpensive, so it was the logical choice for us.
 
