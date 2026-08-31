@@ -250,7 +250,7 @@ We can find a description of the operation and algorithms of the different codes
 
 This diagram shows what code needs to be uploaded to the microcontroller.
 
-<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/diagrams/code-diagram.png" width="500">
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/diagrams/code-diagram.png" width="350">
 
 ## 5. PHOTOS
 
