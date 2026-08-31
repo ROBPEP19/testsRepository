@@ -18,7 +18,7 @@ We have not created any additional libraries or files as required.
 
 A flowchart of the code's operation can be seen below.
 
-<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/diagrams/open-challenge-flowchart.png" width="500">
+<img src = "https://github.com/ROBPEP19/testsRepository/blob/main/diagrams/open-challenge-flowchart.png" width="700">
 
 As can be seen, as soon as the robot is powered on, it enters standby mode until the Start button is pressed. Meanwhile, as observed in the source code, the robot's various systems and peripherals are initialized (I2C communication, color sensor, servomotor, etc.).
 
