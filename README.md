@@ -50,7 +50,7 @@ Now we are heading to the national final of WRO Spain 2026 in Andorra, eager to 
 
 Throughout this document, you will find an explanation of our robot and links to other documents that explain the different sections in more detail.
 
-To comply with the competition rules, we have also included a Journal of Engineering in PDF format. This document is a compilation of the information explained throughout this repository.
+To comply with the competition rules, we have also included a [**Engineering Journal**](/engineering-journal.pdf) in PDF format. This document is a compilation of the information explained throughout this repository.
 
 ## 2. MOBILITY MANAGEMENT
 
