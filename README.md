@@ -38,9 +38,9 @@
 
 * [7. LIST OF COMPONENTS](#7-list-of-components)
 
-* [8. ENGINEERING JOURNAL](#9-engineering-journal)
+* [8. ENGINEERING JOURNAL](#8-engineering-journal)
 
-* [9. LICENSE](#8-license)
+* [9. LICENSE](#9-license)
 
 ## 1. INTRODUCTION
 
