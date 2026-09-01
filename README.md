@@ -38,9 +38,9 @@
 
 * [7. LIST OF COMPONENTS](#7-list-of-components)
 
-* [8. LICENSE](#8-license)
+* [8. ENGINEERING JOURNAL](#9-engineering-journal)
 
-* [9. ENGINEERING JOURNAL](#9-engineering-journal)
+* [9. LICENSE](#8-license)
 
 ## 1. INTRODUCTION
 
@@ -289,7 +289,13 @@ We have uploaded two videos showing our robot completing each challenge. You can
 * **1 * OV5640**
 * **1 * ESP32 S3**
 
-## 8. LICENSE
+## 8. ENGINEERING JOURNAL
+
+As we mentionad on the introduction, to comply with the competition rules, we have also included a [**Engineering Journal**](/engineering-journal.pdf) in PDF format. This document is a compilation of the information explained throughout this repository.
+
+We highly recommend checking out this document, as it is a better looking version of what can be found here at the repository and easier to use.
+
+## 9. LICENSE
 
 The code in this repository is licensed under the GNU General Public License v3.0.
 
@@ -297,8 +303,4 @@ Everything not under the GNU General Public License v3.0 in this repository (inc
 
 A copy of each license can be found in the [LICENSE](LICENSE.txt) file.
 
-## 9. ENGINEERING JOURNAL
 
-As we mentionad on the introduction, to comply with the competition rules, we have also included a [**Engineering Journal**](/engineering-journal.pdf) in PDF format. This document is a compilation of the information explained throughout this repository.
-
-We highly recommend to check out this document, as it is a better looking version of what can be found here at the repository and easier to use.
