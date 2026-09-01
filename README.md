@@ -40,6 +40,8 @@
 
 * [8. LICENSE](#8-license)
 
+* [9. ENGINEERING JOURNAL](#9-engineering-journal)
+
 ## 1. INTRODUCTION
 
 Vila-stem 8 is the Future Engineers team of the Vila-Stem educational robotics cultural association, located in Vila-real, Spain. Some members of this team have already participated in the WRO in different categories in previous years, including this year, while for others it is their first time competing, but we are all equally excited to participate in the Future Engineers category of WRO 2026.
@@ -294,3 +296,9 @@ The code in this repository is licensed under the GNU General Public License v3.
 Everything not under the GNU General Public License v3.0 in this repository (including photographs, diagrams, etc) is under the Creative Commons Attribution Share Alike 4.0 International license
 
 A copy of each license can be found in the [LICENSE](LICENSE.txt) file.
+
+## 9. ENGINEERING JOURNAL
+
+As we mentionad on the introduction, to comply with the competition rules, we have also included a [**Engineering Journal**](/engineering-journal.pdf) in PDF format. This document is a compilation of the information explained throughout this repository.
+
+We highly recommend to check out this document, as it is a better looking version of what can be found here at the repository and easier to use.
